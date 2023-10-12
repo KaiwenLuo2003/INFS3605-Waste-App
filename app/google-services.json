@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "671327856862",
+    "project_id": "infs3605-food-waste-app",
+    "storage_bucket": "infs3605-food-waste-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671327856862:android:9038efefa90be9ce0e7a4f",
+        "android_client_info": {
+          "package_name": "com.example.infs3605wasteapplicationt13a_04"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH-Ogc5p8Jj1ylS3wt5wwpoPgS1_6dnCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
