@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         setTitle("Welcome");
 
         mAuth = FirebaseAuth.getInstance();
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             launchMainActivity();
         } else{
+            System.out.println(response.getError().getErrorCode() + "Authentication failed");
             Log.d(TAG, "Authentication failed");
         }
     }
@@ -71,3 +73,4 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 }
+
