@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -15,10 +16,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.ReceiptOCR;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+
+import org.json.JSONException;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button signOutButton = findViewById(R.id.signOutButton);
         Button cameraButton = findViewById(R.id.cameraButton);
+
+        //for API testing purposes
+        Button apiTestButton = findViewById(R.id.apiTestButton);
 
         ActivityResultLauncher<String> cameraPermission=registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
             @Override
@@ -77,7 +87,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        apiTestButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick (View view) {
+                new printApiResponse();
+            }
+        });
+
     }
 
+    private class printApiResponse extends AsyncTask{
+        protected void printReceiptModel(){
+            try {
+                ReceiptOCR ocrModel = new ReceiptOCR();
+                Log.d(TAG, ocrModel.getReceiptModel().toString());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            printReceiptModel();
+            return null;
+        }
+
+    }
 }
+

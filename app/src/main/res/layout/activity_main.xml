@@ -34,8 +34,21 @@
         android:id="@+id/signOutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="158dp"
+        android:layout_marginEnd="148dp"
+        android:layout_marginBottom="92dp"
         android:text="sign out"
-        tools:layout_editor_absoluteX="158dp"
-        tools:layout_editor_absoluteY="641dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/apiTestButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Call API"
+        tools:layout_editor_absoluteX="159dp"
+        tools:layout_editor_absoluteY="661dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
