@@ -1,5 +1,7 @@
 package com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI;
 
+import android.os.AsyncTask;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 

@@ -10,6 +10,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -90,30 +91,31 @@ public class MainActivity extends AppCompatActivity {
         apiTestButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick (View view) {
-                new printApiResponse();
+                printReceiptModel();
             }
         });
 
+
     }
 
-    private class printApiResponse extends AsyncTask{
-        protected void printReceiptModel(){
-            try {
-                ReceiptOCR ocrModel = new ReceiptOCR();
-                Log.d(TAG, ocrModel.getReceiptModel().toString());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+    private void printReceiptModel(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ReceiptOCR ocrModel = new ReceiptOCR();
+                    Log.d(TAG, ocrModel.getReceiptModel().toString());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        }
+        });
 
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            printReceiptModel();
-            return null;
-        }
-
+        thread.start();
     }
+
+
 }
 
