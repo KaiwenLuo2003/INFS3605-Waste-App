@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.ReceiptOCR;
+import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.RetrofitOCRCall;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +28,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.json.JSONException;
 
 import java.io.IOException;
+
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         //for API testing purposes
         Button apiTestButton = findViewById(R.id.apiTestButton);
+        Log.d(TAG, "Build successful");
 
         ActivityResultLauncher<String> cameraPermission=registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
             @Override
@@ -88,33 +100,52 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        apiTestButton.setOnClickListener(new View.OnClickListener(){
+        OkHttpClient client = new OkHttpClient();
+
+
+        //retrofit version
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com/api/v2/OCR/Model/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
+        Call<ResponseBody> call = nanonetAPI.getModel();
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onClick (View view) {
-                printReceiptModel();
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                Log.d(TAG, response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "API Call Failed");
             }
         });
 
 
     }
 
-    private void printReceiptModel(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ReceiptOCR ocrModel = new ReceiptOCR();
-                    Log.d(TAG, ocrModel.getReceiptModel().toString());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
-        thread.start();
-    }
+    //basic version API Call w/ Threads
+//        Thread thread = new Thread(new Runnable(){
+//            @Override
+//            public void run(){
+//                Request request = new Request.Builder()
+//                                .url("https://app.nanonets.com/api/v2/OCR/Model/49289810-b2ea-4227-8e77-244ec6aec526")
+//                                .get()
+//                                .addHeader("authorization", Credentials.basic("41d2114f-6a73-11ee-b75c-9ab569923c64", ""))
+//                                .build();
+//                try {
+//                    Response response = client.newCall(request).execute();
+//                    String result = response.toString();
+//                    Log.d(TAG, "API Call Successful");
+//                    Log.d(TAG, result);
+//                } catch (IOException e) {
+//                    Log.d(TAG, "API Call Unsuccessful");
+//                    throw new RuntimeException(e);
+//                        }
+//            }
+//        });
+//        thread.start();
 
 
 }
