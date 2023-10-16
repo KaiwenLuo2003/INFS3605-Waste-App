@@ -3,6 +3,7 @@ package com.example.infs3605wasteapplicationt13a_04;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -16,6 +17,7 @@ import okhttp3.Response;
 public class RecipeActivity extends AppCompatActivity {
 
     TextView apiDetails;
+    private static final String TAG = "recipeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         apiDetails = findViewById(R.id.apiDetails);
-        apiDetails.setText("testing");
+        //apiDetails.setText("testing");
         OkHttpClient client = new OkHttpClient();
 
 
@@ -46,10 +48,14 @@ public class RecipeActivity extends AppCompatActivity {
 
                     try {
                         Response response = client.newCall(request).execute();//crashing here
+                        String test = response.toString();
+                        Log.d(TAG, "REEEEEEEE");
+                        Log.d(TAG, test);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    apiDetails.setText("test");
+                    //apiDetails.setText("test");
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
