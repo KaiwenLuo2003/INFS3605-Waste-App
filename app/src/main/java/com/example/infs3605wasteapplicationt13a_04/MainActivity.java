@@ -9,7 +9,9 @@ import androidx.cardview.widget.CardView;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -29,6 +31,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.units.qual.C;
 
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -110,9 +117,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Image to text API Tests
+        getAPIModel();
 
-        //retrofit version
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com/api/v2/OCR/Model/")
+        File image = new File("/storage/emulated/0/Pictures/PXL_20230926_092346453.jpg");
+        uploadImg(image);
+
+
+
+
+
+    }
+
+    public ResponseBody uploadImg(File imgFile){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RequestBody requestImg = RequestBody.create(MultipartBody.FORM, imgFile);
+        MultipartBody.Part body = MultipartBody.Part.createFormData(
+                "image", imgFile.getName(), requestImg);
+
+        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
+        Call<ResponseBody> call = nanonetAPI.getReceiptData(body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d(TAG, response.toString());
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "API POST Call Failed");
+            }
+        });
+        return null;
+    }
+
+    public void getAPIModel(){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -122,80 +166,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 Log.d(TAG, response.toString());
+                Log.d(TAG, "API GET Call Successful");
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "API Call Failed");
-            }
-        });
-
-
-    }
-
-    public void uploadImgtoAPI(){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com/api/v2/OCR/Model/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
-        Call<ResponseBody> call = nanonetAPI.uploadImgFile();
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d(TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "API Call Failed");
+                Log.d(TAG, "API GET Call Failed");
             }
         });
     }
-
-    public void getReceiptDataAPI(){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com/api/v2/OCR/Model/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
-        Call<ResponseBody> call = nanonetAPI.getReceiptData();
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d(TAG, response.toString());
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "API Call Failed");
-            }
-        });
-    }
-
-
-//        OkHttpClient client = new OkHttpClient();
-    //basic version API Call w/ Threads
-//        Thread thread = new Thread(new Runnable(){
-//            @Override
-//            public void run(){
-//                Request request = new Request.Builder()
-//                                .url("https://app.nanonets.com/api/v2/OCR/Model/49289810-b2ea-4227-8e77-244ec6aec526")
-//                                .get()
-//                                .addHeader("authorization", Credentials.basic("41d2114f-6a73-11ee-b75c-9ab569923c64", ""))
-//                                .build();
-//                try {
-//                    Response response = client.newCall(request).execute();
-//                    String result = response.toString();
-//                    Log.d(TAG, "API Call Successful");
-//                    Log.d(TAG, result);
-//                } catch (IOException e) {
-//                    Log.d(TAG, "API Call Unsuccessful");
-//                    throw new RuntimeException(e);
-//                        }
-//            }
-//        });
-//        thread.start();
-
 
 }
