@@ -9,7 +9,6 @@ import androidx.cardview.widget.CardView;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -21,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.ReceiptOCR;
 import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.RetrofitOCRCall;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,18 +27,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.checkerframework.checker.units.qual.C;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-
-import okhttp3.Credentials;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -70,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         pantry = findViewById(R.id.pantryCardView);
         disposalOptions = findViewById(R.id.disposalOptionsCardView);
         recipe = findViewById(R.id.recipeCardView);
+        shop = findViewById(R.id.shopCardView);
         menuBar = findViewById(R.id.menuBarIV);
         editProfile = findViewById(R.id.editProfileIV);
 
@@ -87,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
         cameraPermission.launch(android.Manifest.permission.CAMERA);
 
 //        signOutButton.setOnClickListener(new View.OnClickListener(){
@@ -105,19 +97,18 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-//        cameraButton.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick (View view){
-//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                try{
-//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//                } catch (ActivityNotFoundException e){
-//                    Log.d(TAG, "Camera not found");
-//                }
-//            }
-//        });
-
-        OkHttpClient client = new OkHttpClient();
+        shop.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick (View view){
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try{
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                    //then add intent to go to next screen
+                } catch (ActivityNotFoundException e){
+                    Log.d(TAG, "Camera not found");
+                }
+            }
+        });
 
 
         //retrofit version
@@ -142,6 +133,48 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void uploadImgtoAPI(){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com/api/v2/OCR/Model/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
+        Call<ResponseBody> call = nanonetAPI.uploadImgFile();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d(TAG, response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "API Call Failed");
+            }
+        });
+    }
+
+    public void getReceiptDataAPI(){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com/api/v2/OCR/Model/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
+        Call<ResponseBody> call = nanonetAPI.getReceiptData();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d(TAG, response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "API Call Failed");
+            }
+        });
+    }
+
+
+//        OkHttpClient client = new OkHttpClient();
     //basic version API Call w/ Threads
 //        Thread thread = new Thread(new Runnable(){
 //            @Override
