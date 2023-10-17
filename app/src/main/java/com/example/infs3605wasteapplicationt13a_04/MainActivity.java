@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -16,12 +17,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.ReceiptOCR;
 import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.RetrofitOCRCall;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -40,6 +45,15 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    //Declarations
+    public static final String INTENT_MESSAGE = "intent_message";
+    private BottomNavigationView bottomNavigationView;
+    private RelativeLayout pantry;
+    private RelativeLayout shop;
+    private RelativeLayout disposalOptions;
+    private RelativeLayout recipe;
+    private ImageView menuBar;
+    private ImageView editProfile;
 
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -50,15 +64,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Get handle for view elements
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.homePage);
+        pantry = findViewById(R.id.pantryCardView);
+        disposalOptions = findViewById(R.id.disposalOptionsCardView);
+        recipe = findViewById(R.id.recipeCardView);
+        menuBar = findViewById(R.id.menuBarIV);
+        editProfile = findViewById(R.id.editProfileIV);
+
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Button signOutButton = findViewById(R.id.signOutButton);
-        Button cameraButton = findViewById(R.id.cameraButton);
-
-        //for API testing purposes
-        Button apiTestButton = findViewById(R.id.apiTestButton);
-        Log.d(TAG, "Build successful");
 
         ActivityResultLauncher<String> cameraPermission=registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
             @Override
@@ -73,32 +90,32 @@ public class MainActivity extends AppCompatActivity {
 
         cameraPermission.launch(android.Manifest.permission.CAMERA);
 
-        signOutButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                AuthUI.getInstance()
-                        .signOut(MainActivity.this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-            }
-        });
+//        signOutButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//                AuthUI.getInstance()
+//                        .signOut(MainActivity.this)
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//            }
+//        });
 
-        cameraButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick (View view){
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try{
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                } catch (ActivityNotFoundException e){
-                    Log.d(TAG, "Camera not found");
-                }
-            }
-        });
+//        cameraButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick (View view){
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                try{
+//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//                } catch (ActivityNotFoundException e){
+//                    Log.d(TAG, "Camera not found");
+//                }
+//            }
+//        });
 
         OkHttpClient client = new OkHttpClient();
 
@@ -149,4 +166,3 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
-
