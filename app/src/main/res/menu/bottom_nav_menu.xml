@@ -20,4 +20,5 @@
         android:enabled="true"
         android:icon="@drawable/disposal_menu_icon"
         android:title="Disposal" />
+
 </menu>

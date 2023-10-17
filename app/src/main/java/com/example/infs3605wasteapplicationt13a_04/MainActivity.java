@@ -3,9 +3,14 @@ package com.example.infs3605wasteapplicationt13a_04;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,11 +38,32 @@ public class MainActivity extends AppCompatActivity {
         pantry = findViewById(R.id.pantryCardView);
         disposalOptions = findViewById(R.id.disposalOptionsCardView);
         recipe = findViewById(R.id.recipeCardView);
-        menuBar = findViewById(R.id.menuBarIV);
-        editProfile = findViewById(R.id.editProfileIV);
+        shop = findViewById(R.id.shopCardView);
+
+        shop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchAddItemActivity("Message from HomeActivity");
+            }
+        });
 
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+
+        return true;
+    }
+
+    //Methods to open new activities for navigation bar functionalities
+    public void launchAddItemActivity(String msg) {
+        Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
 }
