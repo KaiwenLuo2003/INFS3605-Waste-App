@@ -17,6 +17,12 @@
             android:label="@string/title_activity_add_item"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
         <activity
+            android:name=".Pantry.PantryActivity"
+            android:exported="false"
+            android:label="@string/title_activity_pantry"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>

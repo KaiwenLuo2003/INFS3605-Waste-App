@@ -27,8 +27,8 @@ public class AddItemActivity extends AppCompatActivity {
 
         //Get handle for view elements
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.pantryPage);
-        surfaceView = findViewById(R.id.surface_view);
+        bottomNavigationView.setSelectedItemId(R.id.cameraPage);
+
 
 
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java

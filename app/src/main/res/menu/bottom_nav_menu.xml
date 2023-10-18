@@ -11,6 +11,11 @@
         android:icon="@drawable/fridge_menu_icon"
         android:title="Pantry" />
     <item
+        android:id="@+id/cameraPage"
+        android:enabled="true"
+        android:icon="@drawable/camera_menu_icon"
+        android:title="Add items" />
+    <item
         android:id="@+id/recipePage"
         android:enabled="true"
         android:icon="@drawable/recipe_menu_icon"
