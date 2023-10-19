@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.NanonetClient;
+import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.ReceiptResponse;
 import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.RetrofitOCRCall;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,9 +34,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.checkerframework.checker.units.qual.C;
 
 import java.io.File;
+import java.io.IOException;
 
+import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -53,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout recipe;
     private ImageView menuBar;
     private ImageView editProfile;
+
+    private static final String apiKey = "41d2114f-6a73-11ee-b75c-9ab569923c64";
+    private static final String BASE_URL = "https://app.nanonets.com";
 
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -117,34 +126,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+
         //Image to text API Tests
         getAPIModel();
 
         File image = new File("/storage/emulated/0/Pictures/PXL_20230926_092346453.jpg");
         uploadImg(image);
 
+        //APIKey Test
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
 
+                Request request = new Request.Builder()
+                        .url("https://app.nanonets.com/api/v2/OCR/Model/49289810-b2ea-4227-8e77-244ec6aec526")
+                        .get()
+                        .addHeader("authorization", Credentials.basic("41d2114f-6a73-11ee-b75c-9ab569923c64", ""))
+                        .build();
 
+                try {
+                    okhttp3.Response response = client.newCall(request).execute();
+                    Log.d(TAG, "TEST SUCCESSFUL: " + response.toString());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
+            ;
+        });
+        t1.start();
 
     }
 
+
     public ResponseBody uploadImg(File imgFile){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        RequestBody requestImg = RequestBody.create(MultipartBody.FORM, imgFile);
-        MultipartBody.Part body = MultipartBody.Part.createFormData(
-                "image", imgFile.getName(), requestImg);
+//        RequestBody requestImg = RequestBody.create(MultipartBody.FORM, imgFile);
+//        MultipartBody.Part body = MultipartBody.Part.createFormData(
+//                "image", imgFile.getName(), requestImg);
+
+        MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(imgFile.getName(), imgFile.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(imgFile.getPath())))
+                .build();
 
         RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
-        Call<ResponseBody> call = nanonetAPI.getReceiptData(body);
+        Call<ResponseBody> call = nanonetAPI.postReceiptData(requestBody);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d(TAG, response.toString());
-
+                Log.d(TAG, "POST Success: " + response.toString());
             }
 
             @Override
@@ -156,17 +195,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getAPIModel(){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    //        Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
+        NanonetClient.NanonetApiService apiService = NanonetClient.NanonetApiService.getClient().create(NanonetClient.NanonetApiService.class);
 
-        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
-        Call<ResponseBody> call = nanonetAPI.getModel();
+        Call<ResponseBody> call = apiService.getModel(apiKey);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                Log.d(TAG, response.toString());
-                Log.d(TAG, "API GET Call Successful");
+                Log.d(TAG, "GET Success: " + response.toString());
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
