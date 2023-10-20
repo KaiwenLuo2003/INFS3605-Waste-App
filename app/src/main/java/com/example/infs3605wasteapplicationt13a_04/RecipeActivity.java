@@ -73,7 +73,7 @@ public class RecipeActivity extends AppCompatActivity {
 //        thread.start();
 
         //retrofit version
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         RecipeInterface recipeAPI = retrofit.create(RecipeInterface.class);
