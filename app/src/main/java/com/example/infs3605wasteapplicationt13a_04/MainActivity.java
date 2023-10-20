@@ -135,42 +135,10 @@ public class MainActivity extends AppCompatActivity {
         File image = new File("/storage/emulated/0/Pictures/PXL_20230926_092346453.jpg");
         uploadImg(image);
 
-        //APIKey Test
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = new OkHttpClient();
-
-                Request request = new Request.Builder()
-                        .url("https://app.nanonets.com/api/v2/OCR/Model/49289810-b2ea-4227-8e77-244ec6aec526")
-                        .get()
-                        .addHeader("authorization", Credentials.basic("41d2114f-6a73-11ee-b75c-9ab569923c64", ""))
-                        .build();
-
-                try {
-                    okhttp3.Response response = client.newCall(request).execute();
-                    Log.d(TAG, "TEST SUCCESSFUL: " + response.toString());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            ;
-        });
-        t1.start();
-
     }
 
 
     public ResponseBody uploadImg(File imgFile){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-//        RequestBody requestImg = RequestBody.create(MultipartBody.FORM, imgFile);
-//        MultipartBody.Part body = MultipartBody.Part.createFormData(
-//                "image", imgFile.getName(), requestImg);
-
         MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
 
         RequestBody requestBody = new MultipartBody.Builder()
@@ -178,12 +146,12 @@ public class MainActivity extends AppCompatActivity {
                 .addFormDataPart(imgFile.getName(), imgFile.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(imgFile.getPath())))
                 .build();
 
-        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
-        Call<ResponseBody> call = nanonetAPI.postReceiptData(requestBody);
+        NanonetClient.NanonetApiService apiService = NanonetClient.NanonetApiService.getClient().create(NanonetClient.NanonetApiService.class);
+        Call<ResponseBody> call = apiService.postReceiptData("Authorization " + Credentials.basic(apiKey, ""), requestBody);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d(TAG, "POST Success: " + response.toString());
+                Log.d(TAG, "API POST Success: " + response.toString());
             }
 
             @Override
@@ -195,14 +163,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getAPIModel(){
-    //        Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
         NanonetClient.NanonetApiService apiService = NanonetClient.NanonetApiService.getClient().create(NanonetClient.NanonetApiService.class);
 
-        Call<ResponseBody> call = apiService.getModel(apiKey);
+        Call<ResponseBody> call = apiService.getModel("Authorization " + Credentials.basic(apiKey, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {

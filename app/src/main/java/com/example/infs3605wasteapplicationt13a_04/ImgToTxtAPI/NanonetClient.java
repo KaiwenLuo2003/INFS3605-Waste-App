@@ -2,6 +2,7 @@ package com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI;
 
 import java.util.Base64;
 
+import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -52,7 +53,7 @@ public class NanonetClient {
             httpClient.addInterceptor(chain -> {
                 Request original = chain.request();
                 Request request = original.newBuilder()
-                        .header("Authorization", "Bearer " + encodedKey)
+                        .header("Authorization", Credentials.basic(apiKey, ""))
                         .method(original.method(), original.body())
                         .build();
                 return chain.proceed(request);
