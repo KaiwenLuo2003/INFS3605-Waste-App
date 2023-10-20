@@ -6,9 +6,14 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.FileUtils;
@@ -61,10 +66,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageView editProfile;
 
     private static final String apiKey = "41d2114f-6a73-11ee-b75c-9ab569923c64";
-    private static final String BASE_URL = "https://app.nanonets.com";
-
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int STORAGE_PERMISSION_REQUEST_CODE = 1;
     final static String TAG = "Main activity";
 
     @Override
@@ -85,18 +89,12 @@ public class MainActivity extends AppCompatActivity {
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        // Check and request permissions when needed
+        requestCameraPermissions();
+        if (!checkStoragePermissions()) {
+            requestStoragePermissions();
+        }
 
-        ActivityResultLauncher<String> cameraPermission=registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-            @Override
-            public void onActivityResult(Boolean result) {
-                if(result){
-                    Toast.makeText(MainActivity.this, "Camera Permission Granted", Toast.LENGTH_SHORT).show();
-                } else{
-                    Toast.makeText(MainActivity.this, "Full app functionality requires Camera Permission", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        cameraPermission.launch(android.Manifest.permission.CAMERA);
 
 //        signOutButton.setOnClickListener(new View.OnClickListener(){
 //            @Override
@@ -127,13 +125,43 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+        //How to Thread: https://stackoverflow.com/questions/3489543/how-to-call-a-method-with-a-separate-thread-in-java
 
         //Image to text API Tests
-        getAPIModel();
-
+//        getAPIModel();
+//
         File image = new File("/storage/emulated/0/Pictures/PXL_20230926_092346453.jpg");
-        uploadImg(image);
+//        uploadImg(image);
+
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
+
+                OkHttpClient client2 = new OkHttpClient();
+
+                RequestBody requestBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart(image.getName(), image.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(image.getPath())))
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/")
+                        .post(requestBody)
+                        .addHeader("Authorization", Credentials.basic("2dccb768-6e4f-11ee-9011-8676698a674c", ""))
+                        .build();
+
+                try {
+                    okhttp3.Response response = client.newCall(request).execute();
+                    Log.d(TAG, "API TEST POST SUCCESSFUL: " + response.toString());
+                } catch (IOException e) {
+                    Log.d(TAG, "API TEST POST FAILED :(");
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        t1.start();
 
     }
 
@@ -177,5 +205,68 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    public void requestCameraPermissions(){
+        ActivityResultLauncher<String> cameraPermission=registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+                if(result){
+                    Toast.makeText(MainActivity.this, "Camera Permission Granted", Toast.LENGTH_SHORT).show();
+                } else{
+                    Toast.makeText(MainActivity.this, "Full app functionality requires Camera Permission", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        cameraPermission.launch(android.Manifest.permission.CAMERA);
+    }
+
+    private boolean checkStoragePermissions() {
+        String[] permissions = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE
+        };
+
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false; // Permission is not granted
+            }
+        }
+        return true; // All permissions are granted
+    }
+
+    private void requestStoragePermissions() {
+        String[] permissions = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE
+        };
+
+        ActivityCompat.requestPermissions(this, permissions, STORAGE_PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
+            boolean allPermissionsGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false; // Permission denied
+                    break;
+                }
+            }
+
+            if (allPermissionsGranted) {
+                // Permissions granted, you can proceed with external storage operations
+                Log.d(TAG, "Storage permission granted");
+            } else {
+                // Permissions denied, handle this situation (e.g., show an explanation, disable functionality, etc.)
+                Log.d(TAG, "Storage permission denied");
+            }
+        }
+    }
+
 
 }
