@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         getAPIModel();
 
         File image = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures", "PXL_20230926_092346453.jpg");
-        uploadImg(image);
+//        uploadImg(image);
 
 //        Thread t1 = new Thread(new Runnable() {
 //            @Override
@@ -150,17 +150,18 @@ public class MainActivity extends AppCompatActivity {
 //
 //                RequestBody requestBody = new MultipartBody.Builder()
 //                        .setType(MultipartBody.FORM)
-//                        .addFormDataPart(image.getName(), image.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(image.getPath())))
+//                        .addFormDataPart("file", image.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(image.getPath())))
 //                        .build();
 //
 //                Request request = new Request.Builder()
-//                        .url("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/")
+//                        .url("https://app.nanonets.com/api/v2/OCR/Model/49289810-b2ea-4227-8e77-244ec6aec526/LabelFile/")
 //                        .post(requestBody)
 //                        .addHeader("Authorization", Credentials.basic("2dccb768-6e4f-11ee-9011-8676698a674c", ""))
 //                        .build();
 //
 //                try {
 //                    okhttp3.Response response = client.newCall(request).execute();
+//                    Log.d(TAG, image.getName() + ": " + image.getPath());
 //                    Log.d(TAG, "API TEST POST SUCCESSFUL: " + response.toString());
 //                } catch (IOException e) {
 //                    Log.d(TAG, "API TEST POST FAILED :(");
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart(imgFile.getName(), imgFile.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(imgFile.getPath())))
+                .addFormDataPart("file", imgFile.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(imgFile.getPath())))
                 .build();
 
         NanonetClient.NanonetApiService apiService = NanonetClient.NanonetApiService.getClient().create(NanonetClient.NanonetApiService.class);
@@ -186,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d(TAG, imgFile.getName() + ": " + imgFile.getPath());
                 Log.d(TAG, "API POST Success: " + response.toString());
             }
 
