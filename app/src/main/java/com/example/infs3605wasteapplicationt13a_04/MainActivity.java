@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -69,6 +70,14 @@ public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int STORAGE_PERMISSION_REQUEST_CODE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_MEDIA_IMAGES,
+            Manifest.permission.ACCESS_MEDIA_LOCATION
+    };
+
+
     final static String TAG = "Main activity";
 
     @Override
@@ -91,9 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Check and request permissions when needed
         requestCameraPermissions();
-        if (!checkStoragePermissions()) {
-            requestStoragePermissions();
-        }
+        verifyStoragePermissions(MainActivity.this);
 
 
 //        signOutButton.setOnClickListener(new View.OnClickListener(){
@@ -128,40 +135,40 @@ public class MainActivity extends AppCompatActivity {
         //How to Thread: https://stackoverflow.com/questions/3489543/how-to-call-a-method-with-a-separate-thread-in-java
 
         //Image to text API Tests
-//        getAPIModel();
+        getAPIModel();
+
+        File image = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures", "PXL_20230926_092346453.jpg");
+        uploadImg(image);
+
+//        Thread t1 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                OkHttpClient client = new OkHttpClient();
+//                MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
 //
-        File image = new File("/storage/emulated/0/Pictures/PXL_20230926_092346453.jpg");
-//        uploadImg(image);
-
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = new OkHttpClient();
-                MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
-
-                OkHttpClient client2 = new OkHttpClient();
-
-                RequestBody requestBody = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart(image.getName(), image.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(image.getPath())))
-                        .build();
-
-                Request request = new Request.Builder()
-                        .url("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/")
-                        .post(requestBody)
-                        .addHeader("Authorization", Credentials.basic("2dccb768-6e4f-11ee-9011-8676698a674c", ""))
-                        .build();
-
-                try {
-                    okhttp3.Response response = client.newCall(request).execute();
-                    Log.d(TAG, "API TEST POST SUCCESSFUL: " + response.toString());
-                } catch (IOException e) {
-                    Log.d(TAG, "API TEST POST FAILED :(");
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-        t1.start();
+//                OkHttpClient client2 = new OkHttpClient();
+//
+//                RequestBody requestBody = new MultipartBody.Builder()
+//                        .setType(MultipartBody.FORM)
+//                        .addFormDataPart(image.getName(), image.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(image.getPath())))
+//                        .build();
+//
+//                Request request = new Request.Builder()
+//                        .url("https://app.nanonets.com/api/v2/OCR/Model/{{model_id}}/LabelFile/")
+//                        .post(requestBody)
+//                        .addHeader("Authorization", Credentials.basic("2dccb768-6e4f-11ee-9011-8676698a674c", ""))
+//                        .build();
+//
+//                try {
+//                    okhttp3.Response response = client.newCall(request).execute();
+//                    Log.d(TAG, "API TEST POST SUCCESSFUL: " + response.toString());
+//                } catch (IOException e) {
+//                    Log.d(TAG, "API TEST POST FAILED :(");
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
+//        t1.start();
 
     }
 
@@ -221,50 +228,21 @@ public class MainActivity extends AppCompatActivity {
         cameraPermission.launch(android.Manifest.permission.CAMERA);
     }
 
-    private boolean checkStoragePermissions() {
-        String[] permissions = {
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE
-        };
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+        Log.d(TAG, "permission: " + permission + " and permGranted: " + PackageManager.PERMISSION_GRANTED);
 
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false; // Permission is not granted
-            }
-        }
-        return true; // All permissions are granted
-    }
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    STORAGE_PERMISSION_REQUEST_CODE
+            );
+            Log.d(TAG, "Storage permission granted");
+            Toast.makeText(activity, "Storage Permission Granted", Toast.LENGTH_SHORT).show();
 
-    private void requestStoragePermissions() {
-        String[] permissions = {
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE
-        };
-
-        ActivityCompat.requestPermissions(this, permissions, STORAGE_PERMISSION_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
-            boolean allPermissionsGranted = true;
-            for (int result : grantResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    allPermissionsGranted = false; // Permission denied
-                    break;
-                }
-            }
-
-            if (allPermissionsGranted) {
-                // Permissions granted, you can proceed with external storage operations
-                Log.d(TAG, "Storage permission granted");
-            } else {
-                // Permissions denied, handle this situation (e.g., show an explanation, disable functionality, etc.)
-                Log.d(TAG, "Storage permission denied");
-            }
         }
     }
 

@@ -33,7 +33,7 @@ public class NanonetClient {
         //POST: upload the image and receive the results of the uploaded image
         //    @Headers("api-key: " + key)
         //    @Multipart
-        @POST("api/v2/OCR/Model/" + modelId + "/LabelFile")
+        @POST("api/v2/OCR/Model/" + modelId + "/LabelFile/")
         Call<ResponseBody> postReceiptData(
                 @Header("Authorization") String apiKey,
                 @Body RequestBody image
