@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         textView.setText("testing");
 
+        Intent intent = getIntent();
+
 
         showMap.setOnClickListener(new View.OnClickListener() {
 

@@ -25,21 +25,43 @@ public class RecipeActivity extends AppCompatActivity {
 
     TextView apiDetails;
     private static final String TAG = "recipeActivity";
+    String api_key = "fd4dad4847msh681f68c54f6e396p14017djsnd0c43955d9e8";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_recipe);
-//
+
 //        Retrofit retrofit = new Retrofit.Builder()
 //                .baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/")
 //                .addConverterFactory(GsonConverterFactory.create())
 //                .build();
 
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_recipe);
         apiDetails = findViewById(R.id.apiDetails);
         //apiDetails.setText("testing");
         OkHttpClient client = new OkHttpClient();
+
+        //retrofit version
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        RecipeInterface recipeAPI = retrofit.create(RecipeInterface.class);
+        Call<ResponseBody> call = recipeAPI.searchRecipe("apples", true, "vegetarian", "", "", 5, 0, false, "");
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                Log.d(TAG, "API CAll Success");
+                Log.d(TAG, response.toString());
+                apiDetails.setText("working");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "API Call Failed");
+            }
+        });
+
 
 
 //        Thread thread = new Thread(new Runnable() {
@@ -72,41 +94,8 @@ public class RecipeActivity extends AppCompatActivity {
 //
 //        thread.start();
 
-        //retrofit version
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
-                .addConverterFactory(GsonConverterFactory.create()).build();
 
-        RecipeInterface recipeAPI = retrofit.create(RecipeInterface.class);
-        Call<ResponseBody> call = recipeAPI.getRecipeByIngredients("apples", 6, true, true, 1);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                Log.d(TAG, "API CAll Success");
-                Log.d(TAG, response.toString());
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "API Call Failed");
-            }
-        });
-//        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://app.nanonets.com/api/v2/OCR/Model/")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        RetrofitOCRCall nanonetAPI = retrofit.create(RetrofitOCRCall.class);
-//        Call<ResponseBody> call = nanonetAPI.getModel();
-//        call.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-//                Log.d(TAG, response.toString());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                Log.d(TAG, "API Call Failed");
-//            }
-//        });
 
 
 
