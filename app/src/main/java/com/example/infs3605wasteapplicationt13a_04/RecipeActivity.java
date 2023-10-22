@@ -1,16 +1,27 @@
 package com.example.infs3605wasteapplicationt13a_04;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.JsonReader;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.infs3605wasteapplicationt13a_04.api.Recipe;
 import com.example.infs3605wasteapplicationt13a_04.api.RecipeInterface;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,12 +35,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RecipeActivity extends AppCompatActivity {
 
     TextView apiDetails;
+    RecyclerView recyclerView;
     private static final String TAG = "recipeActivity";
-    String api_key = "fd4dad4847msh681f68c54f6e396p14017djsnd0c43955d9e8";
+    public static final String api_key = "fd4dad4847msh681f68c54f6e396p14017djsnd0c43955d9e8";
+    public static final String api_url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
 
 //        Retrofit retrofit = new Retrofit.Builder()
 //                .baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/")
@@ -39,28 +54,63 @@ public class RecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
         apiDetails = findViewById(R.id.apiDetails);
-        //apiDetails.setText("testing");
-        OkHttpClient client = new OkHttpClient();
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        apiDetails.setText("test");
+        OkHttpClient client = new OkHttpClient();//think its for the thread method not the retrofit
 
         //retrofit version
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
-                .addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(api_url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
         RecipeInterface recipeAPI = retrofit.create(RecipeInterface.class);
-        Call<ResponseBody> call = recipeAPI.searchRecipe("apples", true, "vegetarian", "", "", 5, 0, false, "");
+        Call<ResponseBody> call = recipeAPI.searchRecipeByIngredients("apples", 1, false, false, 1); //issue with this method, goes into fail route when calling api
+        //Call<ResponseBody> call = recipeAPI.searchRecipe("burger", false, "vegetarian", "", "", 1, 0, false, "");
+
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                Log.d(TAG, "API CAll Success");
-                Log.d(TAG, response.toString());
-                apiDetails.setText("working");
+                System.out.println(response.isSuccessful());
+                if (response.isSuccessful()) {
+                    apiDetails.setText("working");
+                    Log.d(TAG, "API CAll Success");
+                    Log.d(TAG, response.toString());
+                    String res = null;
+                    try {
+                        res = response.body().string();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    apiDetails.setText(res);
+                    System.out.println(res);
+                    String recipeJson = res;//up to this point recipeJson has all the json info, just need to split and assign to object
+                    Gson gson = new Gson();
+                    Type collectionType = new TypeToken<Collection<Recipe>>(){}.getType();
+                    Collection<Recipe> recipes = gson.fromJson(recipeJson, collectionType);
+                    //List<Recipe>
+                    //Recipe recipe = gson.fromJson(recipeJson, Recipe.class);
+                    Optional<Recipe> first = recipes.stream().findFirst();
+                    apiDetails.setText(first.get().getTitle());
+                } else {
+                    apiDetails.setText("fail");
+                }
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "API Call Failed");
             }
         });
+
+    }
+
+//    public void maptoJson() {
+//        String json = ;
+//        Gson gson = new Gson();
+//        Map<String, String> map = gson.fromJson(json, Map.class);
+//    }
 
 
 
@@ -101,5 +151,4 @@ public class RecipeActivity extends AppCompatActivity {
 
 
 
-    }
 }

@@ -1,5 +1,7 @@
 package com.example.infs3605wasteapplicationt13a_04.api;
 
+import java.util.Optional;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -14,10 +16,18 @@ public interface RecipeInterface {
 
     @Headers({"X-RapidAPI-Key: " + api_key,
             "X-RapidAPI-Host: " + api_host})
+    @GET("/recipes/findByIngredients?") // for whatever reason can only have one get method, even if references from recipe activity it wont recognize unless the get req is the first method in this file
+    Call<ResponseBody> searchRecipeByIngredients(
+            @Query("ingredients") String ingredientsList,
+            @Query("number") Integer number,
+            @Query("limitLicense") Boolean limitLicense,
+            @Query("ignorePantry") Boolean ignorePantry,
+            @Query("ranking") Integer ranking
+    );
 
     @GET("/recipes/search?")
     Call<ResponseBody> searchRecipe(
-            @Query("query") String query,
+            @Query("query") String query ,//look into using <Optional> currently sint working as
             @Query("instructionsRequired") boolean instructionsRequired,
             @Query("diet") String diet,
             @Query("excludeIngredients") String excludeIngredients,
@@ -27,6 +37,12 @@ public interface RecipeInterface {
             @Query("limitLicense") boolean limitLicense,
             @Query("cuisine") String cuisine
     );
+
+
+
+
+
+
 
     @GET("/recipes/complexSearch?")
     Call<ResponseBody> complexSearch(
@@ -126,13 +142,6 @@ public interface RecipeInterface {
     );
 
 
-    @GET("/recipes/findByIngredients?")
-    Call<ResponseBody> getRecipeByIngredients(
-            @Query("ingredients") String ingredientsList,
-            @Query("number") int number,
-            @Query("limitLicense") boolean limitLicense,
-            @Query("ignorePantry") boolean ignorePantry,
-            @Query("ranking") int ranking
-    );
+
 
 }
