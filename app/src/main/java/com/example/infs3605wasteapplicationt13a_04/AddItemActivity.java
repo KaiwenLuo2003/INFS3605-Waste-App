@@ -61,9 +61,8 @@ public class AddItemActivity extends AppCompatActivity {
             public void onClick (View view){
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) { //if statement isn't working...
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     // Create the File where the photo should go
-
                     File photoFile = null;
                     try {
                         photoFile = createImageFile();
@@ -74,17 +73,18 @@ public class AddItemActivity extends AppCompatActivity {
 
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
-                        Log.d(TAG, "photo file exists"); //logs not showing up?
+                        Log.d(TAG, "photo file exists");
                         Uri photoURI = FileProvider.getUriForFile(AddItemActivity.this,
                                 "com.example.android.fileprovider",
                                 photoFile);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                        Log.d(TAG, "picture taken");
+                        Log.d(TAG, "picture taken: " + photoURI);
+
 
                         //set imageview as pic
                         imageFilterButton.setImageURI(photoURI);
-                        //sometimes works?? sometimes doesn't?? I think the file is being created tho at least
+                        //sometimes works?? sometimes doesn't?? I think the file is being created tho
                     }
                 }
 
