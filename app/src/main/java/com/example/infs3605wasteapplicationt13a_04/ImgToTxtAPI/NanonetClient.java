@@ -23,6 +23,7 @@ public class NanonetClient {
     private static final String modelId = "49289810-b2ea-4227-8e77-244ec6aec526";
 
     public interface NanonetApiService {
+
         //GET: the model number
         @GET("api/v2/OCR/Model/" + modelId)
         Call<ResponseBody> getModel(
@@ -31,8 +32,6 @@ public class NanonetClient {
 
 
         //POST: upload the image and receive the results of the uploaded image
-        //    @Headers("api-key: " + key)
-        //    @Multipart
         @POST("api/v2/OCR/Model/" + modelId + "/LabelFile/")
         Call<ResponseBody> postReceiptData(
                 @Header("Authorization") String apiKey,
@@ -67,4 +66,9 @@ public class NanonetClient {
         }
     }
 
+    /*    TODO: try get POST method working
+      TODO: figure out how to access pic taken from camera
+      TODO: figure out how to get URL, pic details etc. from the phone
+      TODO: then translate JSONObject into text on to the screen
+*/
 }
