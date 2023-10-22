@@ -6,12 +6,17 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.content.Intent;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -20,8 +25,10 @@ import android.widget.Toast;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.infs3605wasteapplicationt13a_04.Pantry.PantryActivity;
 import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.NanonetClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
@@ -75,8 +82,20 @@ public class MainActivity extends AppCompatActivity {
         disposalOptions = findViewById(R.id.disposalOptionsCardView);
         recipe = findViewById(R.id.recipeCardView);
         shop = findViewById(R.id.shopCardView);
-        menuBar = findViewById(R.id.menuBarIV);
-        editProfile = findViewById(R.id.editProfileIV);
+
+        shop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchAddItemActivity("Message from HomeActivity");
+            }
+        });
+
+        pantry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchPantryActivity("Message from HomeActivity");
+            }
+        });
 
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -232,5 +251,69 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.homePage:
+                        launchHomePageActivity("Message from MainActivity");
+                        return true;
+                    case R.id.pantryPage:
+                        launchPantryActivity("Message from MainActivity");
+                        return true;
+                    case R.id.cameraPage:
+                        launchAddItemActivity("Message from MainActivity");
+                    case R.id.recipePage:Page:
+                        launchRecipeActivity("Message from MainActivity");
+                    case R.id.recyclePage:Page:
+                        launchRecycleActivity("Message from MainActivity");
+                        return true;
+                }
+
+                return false;
+            }
+        });
+        return false;
+    }
+
+
+
+    //Methods to open new activities for navigation bar functionalities
+    public void launchAddItemActivity(String msg) {
+        Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
+    public void launchPantryActivity(String msg) {
+        Intent intent = new Intent(MainActivity.this, PantryActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
+    public void launchRecipeActivity(String msg) {
+        Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
+    public void launchRecycleActivity(String msg) {
+        Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
+    public void launchHomePageActivity(String msg) {
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
 
 }

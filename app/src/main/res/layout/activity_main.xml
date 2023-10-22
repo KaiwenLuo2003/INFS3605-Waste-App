@@ -13,6 +13,7 @@
         android:id="@+id/scrollView4"
         android:layout_width="414dp"
         android:layout_height="646dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,14 +57,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <ImageView
-                    android:id="@+id/menuBarIV"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerInParent="true"
-                    android:padding="6dp"
-                    android:src="@drawable/menu_bar" />
-
 
             </LinearLayout>
 
@@ -103,14 +96,6 @@
                             android:textColor="@color/blue"
                             android:textSize="17sp"
                             android:textStyle="bold" />
-
-                        <ImageView
-                            android:id="@+id/editProfileIV"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginStart="10dp"
-                            android:padding="3dp"
-                            android:src="@drawable/edit_icon" />
 
                     </LinearLayout>
 
@@ -317,7 +302,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp">
 
-                        fsc
 
                         <RelativeLayout
                             android:id="@+id/recipeCardView"

@@ -16,6 +16,17 @@
         android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
         <activity
+            android:name=".AddItemActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_item"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+        <activity
+            android:name=".Pantry.PantryActivity"
+            android:exported="false"
+            android:label="@string/title_activity_pantry"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
@@ -24,8 +35,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:exported="true"/>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
     </application>
 
     <uses-permission android:name="android.permission.CAMERA" />
