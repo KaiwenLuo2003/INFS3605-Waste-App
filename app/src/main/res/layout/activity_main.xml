@@ -10,7 +10,7 @@
     tools:context=".MainActivity">
 
     <ScrollView
-        android:id="@+id/scrollView4"
+        android:id="@+id/scrollView"
         android:layout_width="414dp"
         android:layout_height="646dp"
         android:layout_marginTop="10dp"
@@ -27,7 +27,7 @@
 
 
             <LinearLayout
-                android:id="@+id/topbar"
+                android:id="@+id/locationbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -44,6 +44,7 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/locationTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Kensington"
@@ -191,9 +192,9 @@
                                 android:layout_height="30dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginTop="3dp"
-                                android:layout_marginEnd="3dp"
+                                android:layout_marginEnd="15dp"
                                 android:padding="3dp"
-                                android:src="@drawable/fridge_icon" />
+                                android:src="@drawable/fridge_menu_icon" />
 
                             <TextView
                                 android:layout_width="100dp"
@@ -229,7 +230,7 @@
                                 android:layout_height="30dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginTop="3dp"
-                                android:layout_marginEnd="3dp"
+                                android:layout_marginEnd="15dp"
                                 android:padding="3dp"
                                 android:src="@drawable/bin_icon" />
 
@@ -259,7 +260,6 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/teacherll"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_marginTop="10dp">
@@ -277,7 +277,7 @@
                                 android:layout_height="30dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginTop="3dp"
-                                android:layout_marginEnd="3dp"
+                                android:layout_marginEnd="15dp"
                                 android:padding="3dp"
                                 android:src="@drawable/shop_icon" />
 
@@ -316,7 +316,7 @@
                                 android:layout_height="30dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginTop="3dp"
-                                android:layout_marginEnd="3dp"
+                                android:layout_marginEnd="15dp"
                                 android:padding="3dp"
                                 android:src="@drawable/recipe_icon" />
 
@@ -358,6 +358,7 @@
                     android:textSize="17sp" />
 
                 <TextView
+                    android:id="@+id/itemExpiringTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="8"
@@ -366,7 +367,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

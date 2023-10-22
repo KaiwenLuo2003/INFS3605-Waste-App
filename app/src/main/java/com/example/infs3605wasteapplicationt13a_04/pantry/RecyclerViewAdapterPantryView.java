@@ -1,4 +1,4 @@
-package com.example.infs3605wasteapplicationt13a_04.Pantry;
+package com.example.infs3605wasteapplicationt13a_04.pantry;
 
 import android.content.Context;
 import android.view.LayoutInflater;

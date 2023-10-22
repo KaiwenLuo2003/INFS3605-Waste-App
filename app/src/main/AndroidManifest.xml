@@ -17,7 +17,7 @@
             android:label="@string/title_activity_add_item"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
         <activity
-            android:name=".Pantry.PantryActivity"
+            android:name=".pantry.PantryActivity"
             android:exported="false"
             android:label="@string/title_activity_pantry"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
@@ -25,6 +25,11 @@
             android:name=".recipe.RecipeActivity"
             android:exported="false"
             android:label="@string/title_activity_recipe"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+        <activity
+            android:name=".recycle.RecycleActivity"
+            android:exported="false"
+            android:label="@string/title_activity_recycle"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
 
         <activity

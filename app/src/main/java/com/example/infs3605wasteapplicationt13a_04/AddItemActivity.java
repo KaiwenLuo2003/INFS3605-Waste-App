@@ -6,14 +6,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SurfaceView;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.infs3605wasteapplicationt13a_04.Pantry.PantryActivity;
+import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
+import com.example.infs3605wasteapplicationt13a_04.recycle.RecycleActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -95,7 +94,7 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(AddItemActivity.this, AddItemActivity.class);
+        Intent intent = new Intent(AddItemActivity.this, RecycleActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }

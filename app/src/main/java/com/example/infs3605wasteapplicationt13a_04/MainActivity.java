@@ -2,6 +2,7 @@ package com.example.infs3605wasteapplicationt13a_04;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,9 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.example.infs3605wasteapplicationt13a_04.Pantry.PantryActivity;
+import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
+import com.example.infs3605wasteapplicationt13a_04.recycle.RecycleActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout recipe;
     private ImageView menuBar;
     private ImageView editProfile;
+    private TextView itemsExpiringNotice;
+    private TextView locationInformation;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         disposalOptions = findViewById(R.id.disposalOptionsCardView);
         recipe = findViewById(R.id.recipeCardView);
         shop = findViewById(R.id.shopCardView);
+        itemsExpiringNotice = findViewById(R.id.itemExpiringTV);
+        locationInformation = findViewById(R.id.locationTV);
 
         shop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+        Intent intent = new Intent(MainActivity.this, RecycleActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }

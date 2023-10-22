@@ -1,4 +1,4 @@
-package com.example.infs3605wasteapplicationt13a_04.Pantry;
+package com.example.infs3605wasteapplicationt13a_04.recycle;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -6,69 +6,31 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceView;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
-import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
+import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
-import com.example.infs3605wasteapplicationt13a_04.ui.RecyclerViewInterface;
-import com.example.infs3605wasteapplicationt13a_04.ui.SpacingItemDecorator;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-
-public class PantryActivity extends AppCompatActivity implements RecyclerViewAdapterPantryView.ItemClickListener{
+public class RecycleActivity extends AppCompatActivity {
+    //Declarations
     public static final String INTENT_MESSAGE = "intent_message";
     private BottomNavigationView bottomNavigationView;
 
-    private RecyclerViewAdapterPantryView adapter;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pantry);
-
-        //Temporary data to populate recyclerview
-        ArrayList<String> pantryItemNames = new ArrayList<>();
-        pantryItemNames.add("Chocolate");
-        pantryItemNames.add("Cheese");
-        pantryItemNames.add("Lemon");
+        setContentView(R.layout.activity_recycle);
 
         //Get handle for view elements
-        recyclerView = findViewById(R.id.rvPantryList);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.pantryPage);
-
-        //Instantiate a linear recycler view layout manager
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerViewAdapterPantryView(this, pantryItemNames);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-
-
-        //Format the recycler view for readibility and aesthetics
-        SpacingItemDecorator itemDecorator = new SpacingItemDecorator(60, 50);
-        recyclerView.addItemDecoration(itemDecorator);
-
-
-        //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        bottomNavigationView.setSelectedItemId(R.id.homePage);
 
     }
 
@@ -108,38 +70,34 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewAda
 
     //Methods to open new activities for navigation bar functionalities
     public void launchAddItemActivity(String msg) {
-        Intent intent = new Intent(PantryActivity.this, AddItemActivity.class);
+        Intent intent = new Intent(RecycleActivity.this, AddItemActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 
     public void launchPantryActivity(String msg) {
-        Intent intent = new Intent(PantryActivity.this, PantryActivity.class);
+        System.out.println("hello");
+        Intent intent = new Intent(RecycleActivity.this, PantryActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 
     public void launchRecipeActivity(String msg) {
-        Intent intent = new Intent(PantryActivity.this, RecipeActivity.class);
+        Intent intent = new Intent(RecycleActivity.this, RecipeActivity.class);
         intent.putExtra(RecipeActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 
     public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(PantryActivity.this, AddItemActivity.class);
+        Intent intent = new Intent(RecycleActivity.this, AddItemActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 
     public void launchHomePageActivity(String msg) {
-        Intent intent = new Intent(PantryActivity.this, MainActivity.class);
+        Intent intent = new Intent(RecycleActivity.this, RecycleActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 
-
-    @Override
-    public void onItemClick(View view, int position) {
-
-    }
 }
