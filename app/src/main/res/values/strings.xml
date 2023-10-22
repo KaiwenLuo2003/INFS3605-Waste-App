@@ -6,4 +6,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_add_item">AddItemActivity</string>
     <string name="title_activity_pantry">PantryActivity</string>
+    <string name="title_activity_recipe">Recipe</string>
 </resources>

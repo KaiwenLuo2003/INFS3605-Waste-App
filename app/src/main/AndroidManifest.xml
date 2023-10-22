@@ -21,6 +21,11 @@
             android:exported="false"
             android:label="@string/title_activity_pantry"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+        <activity
+            android:name=".recipe.RecipeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_recipe"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
 
         <activity
             android:name=".LoginActivity"

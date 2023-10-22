@@ -16,7 +16,7 @@
         android:icon="@drawable/camera_menu_icon"
         android:title="Add items" />
     <item
-        android:id="@+id/recipePage"
+        android:id="@+id/recipesPage"
         android:enabled="true"
         android:icon="@drawable/recipe_menu_icon"
         android:title="Recipes" />
