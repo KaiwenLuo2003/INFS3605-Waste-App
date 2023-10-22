@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homePage"
+        android:icon="@drawable/home_menu_icon"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/pantryPage"
+        android:enabled="true"
+        android:icon="@drawable/fridge_menu_icon"
+        android:title="Pantry" />
+    <item
+        android:id="@+id/cameraPage"
+        android:enabled="true"
+        android:icon="@drawable/camera_menu_icon"
+        android:title="Add items" />
+    <item
+        android:id="@+id/recipesPage"
+        android:enabled="true"
+        android:icon="@drawable/recipe_menu_icon"
+        android:title="Recipes" />
+    <item
+        android:id="@+id/recyclePage"
+        android:enabled="true"
+        android:icon="@drawable/disposal_menu_icon"
+        android:title="Disposal" />
+
+</menu>

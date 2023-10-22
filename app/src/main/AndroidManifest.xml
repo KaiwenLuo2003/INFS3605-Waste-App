@@ -16,6 +16,27 @@
         android:theme="@style/Theme.INFS3605WasteApplicationT13A_04"
         tools:targetApi="31">
         <activity
+            android:name=".AddItemActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_item"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+        <activity
+            android:name=".pantry.PantryActivity"
+            android:exported="false"
+            android:label="@string/title_activity_pantry"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+        <activity
+            android:name=".recipe.RecipeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_recipe"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+        <activity
+            android:name=".recycle.RecycleActivity"
+            android:exported="false"
+            android:label="@string/title_activity_recycle"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+
+        <activity
             android:name=".RecipeActivity"
             android:exported="false" />
         <activity
@@ -33,7 +54,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBB6hyGjQ3xSKBL34GiHLHll_ocMIoJY0Y" />

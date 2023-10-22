@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">INFS3605 Waste Application T13A_04</string>
+    <string name="title_activity_add_receipt">AddReceiptActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_add_item">AddItemActivity</string>
+    <string name="title_activity_pantry">PantryActivity</string>
+    <string name="title_activity_recipe">RecipeActivity</string>
+    <string name="title_activity_recycle">RecycleActivity</string>
 </resources>
