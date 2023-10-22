@@ -66,7 +66,7 @@ public class NanonetClient {
         }
     }
 
-    /*    TODO: try get POST method working
+    /*    TODO: try get POST method working - work with Nanonets
       TODO: figure out how to access pic taken from camera
       TODO: figure out how to get URL, pic details etc. from the phone
       TODO: then translate JSONObject into text on to the screen

@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_MEDIA_LOCATION
     };
 
-
     final static String TAG = "Main activity";
 
     @Override
@@ -252,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

@@ -32,7 +32,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="39dp"
         android:layout_marginBottom="473dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/scanItemLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -54,7 +54,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/scanItemLinearLayout"
         android:layout_width="198dp"
         android:layout_height="52dp"
         android:layout_marginTop="546dp"
