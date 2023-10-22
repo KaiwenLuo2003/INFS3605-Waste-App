@@ -8,9 +8,6 @@
         app:showAsAction="always">
         <menu>
             <item
-                android:id="@+id/settingsMenuItem"
-                android:title="Settings" />
-            <item
                 android:id="@+id/accountMenuItem"
                 android:title="My Account" />
             <item

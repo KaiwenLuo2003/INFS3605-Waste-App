@@ -20,6 +20,7 @@ import java.util.List;
 
 
 public class LoginActivity extends AppCompatActivity {
+    public static final String INTENT_MESSAGE = "intent_message";
     private FirebaseAuth mAuth;
     final static String TAG = "Login activity";
     private Bundle bundle = new Bundle();
