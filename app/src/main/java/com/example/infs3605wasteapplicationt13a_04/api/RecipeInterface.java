@@ -25,6 +25,8 @@ public interface RecipeInterface {
             @Query("ranking") Integer ranking
     );
 
+    @Headers({"X-RapidAPI-Key: " + api_key,
+            "X-RapidAPI-Host: " + api_host})
     @GET("/recipes/search?")
     Call<ResponseBody> searchRecipe(
             @Query("query") String query ,//look into using <Optional> currently sint working as
@@ -38,12 +40,8 @@ public interface RecipeInterface {
             @Query("cuisine") String cuisine
     );
 
-
-
-
-
-
-
+    @Headers({"X-RapidAPI-Key: " + api_key,
+            "X-RapidAPI-Host: " + api_host})
     @GET("/recipes/complexSearch?")
     Call<ResponseBody> complexSearch(
             @Query("query") String query,
