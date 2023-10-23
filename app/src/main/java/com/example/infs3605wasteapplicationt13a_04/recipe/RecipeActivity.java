@@ -1,6 +1,7 @@
 package com.example.infs3605wasteapplicationt13a_04.recipe;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,12 +33,12 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -52,14 +53,15 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
     private static final String TAG = "recipeActivity";
     public static final String api_key = "fd4dad4847msh681f68c54f6e396p14017djsnd0c43955d9e8";
     public static final String api_url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
+    public ArrayList<String> recipeNames = new ArrayList<>();
+    public ArrayList<Recipe> recipeList = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        ArrayList<String> recipeNames = new ArrayList<>();
-        ArrayList<Recipe> recipeList = new ArrayList<>();
+
 
         //recipe api stuff
         OkHttpClient client = new OkHttpClient();//think its for the thread method not the retrofit
@@ -70,13 +72,11 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
                 .build();
 
         RecipeInterface recipeAPI = retrofit.create(RecipeInterface.class);
-        Call<ResponseBody> call = recipeAPI.searchRecipeByIngredients("apples", 1, false, false, 1); //issue with this method, goes into fail route when calling api
+        Call<ResponseBody> call = recipeAPI.searchRecipeByIngredients("apples", 10, false, false, 1); //issue with this method, goes into fail route when calling api
         //Call<ResponseBody> call = recipeAPI.searchRecipe("burger", false, "vegetarian", "", "", 1, 0, false, "");
-
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 //apiDetails.setText("working");
                 Log.d(TAG, "API CAll Success");
                 Log.d(TAG, response.toString());
@@ -90,14 +90,16 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
                 System.out.println(res);
                 String recipeJson = res;//up to this point recipeJson has all the json info, just need to split and assign to object
                 Gson gson = new Gson();
-                Type collectionType = new TypeToken<Collection<Recipe>>(){}.getType();
+                Type collectionType = new TypeToken<Collection<Recipe>>() {
+                }.getType();
                 Collection<Recipe> recipes = gson.fromJson(recipeJson, collectionType);
                 recipeList.addAll(recipes);
                 //create arraylist of items based on the title of the api calls
                 //apiDetails.setText(first.get().getTitle());
-                for (int i=0; i<recipeList.size(); i++) {
+                for (int i = 0; i < recipeList.size(); i++) {
                     recipeNames.add(recipeList.get(i).getTitle());
                     System.out.println(recipeNames.get(i));//currently its got the correct recipes, its just not showing up in the recyclerview
+                    adapter.notifyItemInserted(i);//temporary fix, item has been added to arrayList, but not sure if it would return the entire recipe when clicked on
                 }
 
             }
@@ -105,22 +107,20 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "API Call Failed");
             }
+
         });
         //end of api stuff
         //System.out.println(recipeList.get(0));//currently is not filled with data
 
-        recipeNames.add("Cheesecake");
-        recipeNames.add("Pasta bake");
-        recipeNames.add("Lemonade");
+//        recipeNames.add("Cheesecake");
+//        recipeNames.add("Pasta bake");
+//        recipeNames.add("Lemonade");
         //Temporary data to populate recyclerview
-
-
 
         //Get handle for view elements
         recyclerView = findViewById(R.id.rvRecipeList);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.recipesPage);
-
 
         //Instantiate a linear recycler view layout manager
         layoutManager = new LinearLayoutManager(this);
@@ -136,6 +136,8 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
 
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
     }
 
 
