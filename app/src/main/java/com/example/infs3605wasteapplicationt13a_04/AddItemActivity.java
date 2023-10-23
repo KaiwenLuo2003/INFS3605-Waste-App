@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,6 +40,7 @@ public class AddItemActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 201;
     private TextView receiptText;
     final static String TAG = "AddItemsActivity";
+    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,11 +77,10 @@ public class AddItemActivity extends AppCompatActivity {
                     if (photoFile != null) {
                         Log.d(TAG, "photo file exists");
                         Uri photoURI = FileProvider.getUriForFile(AddItemActivity.this,
-                                "com.example.android.fileprovider",
+                                AUTHORITY,
                                 photoFile);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                        Log.d(TAG, "picture taken: " + photoURI);
 
 
                         //set imageview as pic

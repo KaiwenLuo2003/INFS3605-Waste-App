@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         getAPIModel();
 
         File image = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures", "PXL_20230926_092346453.jpg");
-//        uploadImg(image);
+        uploadImg(image);
 
         //Nanonets Documentation version
 //        Thread t1 = new Thread(new Runnable() {
