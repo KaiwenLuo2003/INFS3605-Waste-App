@@ -5,6 +5,8 @@
     <uses-feature
         android:name="android.hardware.camera" />
 
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,11 +23,23 @@
             android:label="@string/title_activity_add_item"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
         <activity
-            android:name=".Pantry.PantryActivity"
+            android:name=".pantry.PantryActivity"
             android:exported="false"
             android:label="@string/title_activity_pantry"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
-
+        <activity
+            android:name=".recipe.RecipeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_recipe"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+        <activity
+            android:name=".recycle.RecycleActivity"
+            android:exported="false"
+            android:label="@string/title_activity_recycle"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
+        <activity
+            android:name=".MapActivity"
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -49,6 +63,9 @@
             </meta-data>
         </provider>
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBB6hyGjQ3xSKBL34GiHLHll_ocMIoJY0Y" />
     </application>
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -58,6 +75,8 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <queries>
         <intent>

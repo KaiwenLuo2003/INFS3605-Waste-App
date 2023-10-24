@@ -7,12 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,7 +25,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
+import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
@@ -103,7 +108,41 @@ public class AddItemActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
 
-        return true;
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.homePage:
+                        launchHomePageActivity("Message from MainActivity");
+                        System.out.print("recipe");
+                        return true;
+                    case R.id.pantryPage:
+                        launchPantryActivity("Message from MainActivity");
+                        return true;
+                    case R.id.cameraPage:
+                        launchAddItemActivity("Message from MainActivity");
+                        return true;
+                    case R.id.recipesPage:
+                        launchRecipeActivity("Message from HomeActivity");
+                        return true;
+                    case R.id.recyclePage:
+                        launchRecycleActivity("Message from MainActivity");
+                        return true;
+                }
+
+                return false;
+            }
+        });
+        return false;
+    }
+
+
+
+    //Methods to open new activities for navigation bar functionalities
+    public void launchAddItemActivity(String msg) {
+        Intent intent = new Intent(AddItemActivity.this, AddItemActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
     }
 
     private File createImageFile() throws IOException {
@@ -124,5 +163,31 @@ public class AddItemActivity extends AppCompatActivity {
         Log.d(TAG, "image file created at : " + currentPhotoPath);
         return image;
     }
+
+
+    public void launchPantryActivity(String msg) {
+        Intent intent = new Intent(AddItemActivity.this, PantryActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
+    public void launchRecipeActivity(String msg) {
+        Intent intent = new Intent(AddItemActivity.this, RecipeActivity.class);
+        intent.putExtra(RecipeActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
+    public void launchRecycleActivity(String msg) {
+        Intent intent = new Intent(AddItemActivity.this, MapActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
+    public void launchHomePageActivity(String msg) {
+        Intent intent = new Intent(AddItemActivity.this, MainActivity.class);
+        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
 
 }
