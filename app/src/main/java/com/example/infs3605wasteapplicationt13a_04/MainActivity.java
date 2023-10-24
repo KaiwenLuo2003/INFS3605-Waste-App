@@ -1,9 +1,6 @@
 package com.example.infs3605wasteapplicationt13a_04;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,15 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
-import com.example.infs3605wasteapplicationt13a_04.recycle.RecycleActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,10 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView locationInformation;
     private TextView usersName;
 
-    @SuppressLint("MissingInflatedId")
-    Button showMap;
-    Button getApi;
-    TextView textView;
+
 
 
     @Override
@@ -84,23 +75,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        showMap = findViewById(R.id.showMap);
-        getApi = findViewById(R.id.getApi);
-        textView = findViewById(R.id.textView);
 
-        textView.setText("testing");
-
-        Intent intent = getIntent();
-
-
-        showMap.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                startActivity(intent);
-            }
-        });
 
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -108,17 +83,6 @@ public class MainActivity extends AppCompatActivity {
         //Find user details from Firebase then set personalised title
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         usersName.setText(user.getDisplayName());
-
-        getApi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
-                startActivity(intent);
-            }
-
-
-
-        });
 
 
     }
@@ -189,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(MainActivity.this, RecycleActivity.class);
+        Intent intent = new Intent(MainActivity.this, MapActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }

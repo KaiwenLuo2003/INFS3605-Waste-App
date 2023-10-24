@@ -35,10 +35,6 @@
             android:exported="false"
             android:label="@string/title_activity_recycle"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
-
-        <activity
-            android:name=".RecipeActivity"
-            android:exported="false" />
         <activity
             android:name=".MapActivity"
             android:exported="false" />

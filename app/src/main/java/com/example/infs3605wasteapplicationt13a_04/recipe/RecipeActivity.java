@@ -17,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
+import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.api.Recipe;
 import com.example.infs3605wasteapplicationt13a_04.api.RecipeInterface;
 import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
-import com.example.infs3605wasteapplicationt13a_04.recycle.RecycleActivity;
 import com.example.infs3605wasteapplicationt13a_04.ui.SpacingItemDecorator;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -199,7 +199,7 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
     }
 
     public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(RecipeActivity.this, RecycleActivity.class);
+        Intent intent = new Intent(RecipeActivity.this, MapActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
