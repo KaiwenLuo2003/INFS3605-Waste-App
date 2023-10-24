@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
         disposalOptions = findViewById(R.id.disposalOptionsCardView);
         recipe = findViewById(R.id.recipeCardView);
         shop = findViewById(R.id.shopCardView);
-        testButton = findViewById(R.id.TestButton);
 
         shop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,8 +125,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick (View view){
                 try{
-                    File image = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures", "PXL_20230926_092346453.jpg");
-//                    uploadImg(image);
+
 
                 } catch (ActivityNotFoundException e){
                     Log.d(TAG, "button failed");
@@ -138,8 +136,9 @@ public class MainActivity extends AppCompatActivity {
         //How to Thread: https://stackoverflow.com/questions/3489543/how-to-call-a-method-with-a-separate-thread-in-java
 
         //Image to text API Tests
-        getAPIModel();
-
+//        getAPIModel();
+//        File image = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures", "PXL_20230926_092346453.jpg");
+//                    uploadImg(image);
 
         //Nanonets Documentation version
 //        Thread t1 = new Thread(new Runnable() {
