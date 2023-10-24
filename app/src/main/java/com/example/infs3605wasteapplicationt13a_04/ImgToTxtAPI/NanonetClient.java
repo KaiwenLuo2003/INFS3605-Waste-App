@@ -18,9 +18,9 @@ import retrofit2.http.POST;
 
 public class NanonetClient {
     private static final String BASE_URL = "https://app.nanonets.com";
-//    private static final String apiKey = "41d2114f-6a73-11ee-b75c-9ab569923c64";
-    private static final String apiKey = "2dccb768-6e4f-11ee-9011-8676698a674c";
-    private static final String modelId = "49289810-b2ea-4227-8e77-244ec6aec526";
+    private static final String apiKey = "41d2114f-6a73-11ee-b75c-9ab569923c64";
+//    private static final String apiKey = "2dccb768-6e4f-11ee-9011-8676698a674c";
+    private static final String modelId = "49289810-b2ea-4227-8e77-244ec6aec526";`
 
     public interface NanonetApiService {
 

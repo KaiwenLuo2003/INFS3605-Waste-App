@@ -21,6 +21,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout recipe;
     private ImageView menuBar;
     private ImageView editProfile;
+    private Button testButton;
 
     private static final String apiKey = "41d2114f-6a73-11ee-b75c-9ab569923c64";
 
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         disposalOptions = findViewById(R.id.disposalOptionsCardView);
         recipe = findViewById(R.id.recipeCardView);
         shop = findViewById(R.id.shopCardView);
+        testButton = findViewById(R.id.TestButton);
 
         shop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,42 +107,39 @@ public class MainActivity extends AppCompatActivity {
         verifyStoragePermissions(MainActivity.this);
 
 
-//        signOutButton.setOnClickListener(new View.OnClickListener(){
+        //intent to go to camera stuff
+//        shop.setOnClickListener(new View.OnClickListener(){
 //            @Override
-//            public void onClick(View view){
-//                AuthUI.getInstance()
-//                        .signOut(MainActivity.this)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                                startActivity(intent);
-//                            }
-//                        });
+//            public void onClick (View view){
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                try{
+//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//                    //then add intent to go to next screen
+//                } catch (ActivityNotFoundException e){
+//                    Log.d(TAG, "Camera not found");
+//                }
 //            }
 //        });
 
-        shop.setOnClickListener(new View.OnClickListener(){
+        //API POST test stuff
+        testButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick (View view){
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 try{
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                    //then add intent to go to next screen
+                    File image = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures", "PXL_20230926_092346453.jpg");
+//                    uploadImg(image);
+
                 } catch (ActivityNotFoundException e){
-                    Log.d(TAG, "Camera not found");
+                    Log.d(TAG, "button failed");
                 }
             }
         });
-
 
         //How to Thread: https://stackoverflow.com/questions/3489543/how-to-call-a-method-with-a-separate-thread-in-java
 
         //Image to text API Tests
         getAPIModel();
 
-        File image = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures", "PXL_20230926_092346453.jpg");
-        uploadImg(image);
 
         //Nanonets Documentation version
 //        Thread t1 = new Thread(new Runnable() {
@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
 //                OkHttpClient client = new OkHttpClient();
 //                MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
 //
-//                OkHttpClient client2 = new OkHttpClient();
 //
 //                RequestBody requestBody = new MultipartBody.Builder()
 //                        .setType(MultipartBody.FORM)
