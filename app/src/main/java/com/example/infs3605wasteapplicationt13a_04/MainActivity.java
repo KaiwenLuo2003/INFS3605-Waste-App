@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,10 +16,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.infs3605wasteapplicationt13a_04.Pantry.PantryActivity;
+import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.NanonetClient;
+
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
@@ -55,10 +62,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView itemsExpiringNotice;
     private TextView locationInformation;
     private TextView usersName;
-
-
-
-    private Button testButton;
 
     private static final String apiKey = "41d2114f-6a73-11ee-b75c-9ab569923c64";
 
@@ -136,18 +139,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        //API POST test stuff
-        testButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick (View view){
-                try{
-
-
-                } catch (ActivityNotFoundException e){
-                    Log.d(TAG, "button failed");
-                }
-            }
-        });
 
         //How to Thread: https://stackoverflow.com/questions/3489543/how-to-call-a-method-with-a-separate-thread-in-java
 
@@ -265,14 +256,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-        //Find user details from Firebase then set personalised title
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        usersName.setText(user.getDisplayName());
-
-
-    }
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);

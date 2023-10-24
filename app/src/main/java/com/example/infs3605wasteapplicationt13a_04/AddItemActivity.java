@@ -1,11 +1,13 @@
 package com.example.infs3605wasteapplicationt13a_04;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.utils.widget.ImageFilterButton;
 import androidx.core.content.FileProvider;
 
 import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
@@ -44,12 +47,15 @@ public class AddItemActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 201;
     private TextView receiptText;
+    private TextView buttonText;
     final static String TAG = "AddItemsActivity";
     private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider";
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_item);
+
 
         //Get handle for view elements
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -57,48 +63,65 @@ public class AddItemActivity extends AppCompatActivity {
 
         //init objects
         LinearLayout scanButton = findViewById(R.id.scanItemLinearLayout);
-        ImageView imageFilterButton = findViewById(R.id.imageFilterButton);
+        buttonText = findViewById(R.id.buttonText);
+        buttonText.setText("Scan Item");
+        ImageFilterButton imageFilterButton = findViewById(R.id.imageFilterButton);
 
 
         Log.d(TAG, "actual context: " + AddItemActivity.this.getApplicationContext().toString());
         Context context = AddItemActivity.this.getApplicationContext();
 
+        //old scanbutton listener
+//        scanButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick (View view){
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//                    // Create the File where the photo should go
+//                    File photoFile = null;
+//                    try {
+//                        photoFile = createImageFile();
+//                        Log.d(TAG, "photoFile created");
+//                    } catch (IOException ex) {
+//                        Log.d(TAG, "Error occcured while creating the File");
+//                    }
+//
+//                    // Continue only if the File was successfully created
+//                    if (photoFile != null) {
+//                        Log.d(TAG, "photo file exists");
+//                        Uri photoURI = FileProvider.getUriForFile(AddItemActivity.this,
+//                                AUTHORITY,
+//                                photoFile);
+//                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//
+//
+//                        //set imageview as pic
+//                        imageFilterButton.setImageURI(photoURI);
+//                        //sometimes works?? sometimes doesn't?? I think the file is being created tho
+//                    }
+//                }
+//            }
+//        });
+
+        //new scanbutton listener
         scanButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick (View view){
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                        Log.d(TAG, "photoFile created");
-                    } catch (IOException ex) {
-                        Log.d(TAG, "Error occcured while creating the File");
-                    }
-
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        Log.d(TAG, "photo file exists");
-                        Uri photoURI = FileProvider.getUriForFile(AddItemActivity.this,
-                                AUTHORITY,
-                                photoFile);
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-
-
-                        //set imageview as pic
-                        imageFilterButton.setImageURI(photoURI);
-                        //sometimes works?? sometimes doesn't?? I think the file is being created tho
-                    }
+                if(buttonText.getText()=="Scan Item"){
+                    //set imageFilterButton as pic
+                    int id = getResources().getIdentifier("com.example.infs3605wasteapplicationt13a_04:drawable/test_receipt_1", null, null);
+                    imageFilterButton.setImageResource(id);
+                    imageFilterButton.setImageZoom(1);
+                    buttonText.setText("Next");
+                } else if(buttonText.getText()=="Next"){
+                    Intent intent = new Intent(AddItemActivity.this, LoadingActivity.class);
+                    startActivity(intent);
                 }
-
-
-
             }
         });
-
 
 
 
