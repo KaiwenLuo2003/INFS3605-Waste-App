@@ -125,7 +125,7 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
         //Instantiate a linear recycler view layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerViewAdapterRecipeView(this, recipeNames);
+        adapter = new RecyclerViewAdapterRecipeView(this, recipeList);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -136,14 +136,14 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
 
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
     }
 
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "You clicked " + adapter.getItem(position).getTitle() + " on row number " + (position+1), Toast.LENGTH_SHORT).show();
+        Recipe tempRecipe = recipeList.get(position);
+        launchRecipeDetail(INTENT_MESSAGE);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -207,6 +207,12 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
     public void launchHomePageActivity(String msg) {
         Intent intent = new Intent(RecipeActivity.this, MainActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
+
+    public void launchRecipeDetail(String msg) {
+        Intent intent = new Intent(RecipeActivity.this, RecipeDetail.class);
+        intent.putExtra(RecipeActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 }
