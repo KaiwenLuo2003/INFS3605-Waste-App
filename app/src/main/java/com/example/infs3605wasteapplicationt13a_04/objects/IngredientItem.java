@@ -4,10 +4,10 @@ public class IngredientItem {
     private String itemName;
     private String expiryDate;
     private int icon;
-    private int quantity;
+    private String quantity;
 
 
-    public IngredientItem (String itemName, String expiryDate, int icon, int quantity){
+    public IngredientItem (String itemName, String expiryDate, int icon, String quantity){
         this.itemName = itemName;
         this.expiryDate = expiryDate;
         this.icon = icon;
@@ -39,11 +39,11 @@ public class IngredientItem {
         this.icon = icon;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 }

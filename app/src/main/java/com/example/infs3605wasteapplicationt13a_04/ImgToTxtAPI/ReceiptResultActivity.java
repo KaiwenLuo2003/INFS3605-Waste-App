@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
+import com.example.infs3605wasteapplicationt13a_04.EditItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
@@ -32,12 +33,14 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class ReceiptResultActivity extends AppCompatActivity implements RecyclerViewAdapterReceiptResultView.ItemClickListener{
+public class ReceiptResultActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
-
     private RecyclerViewAdapterReceiptResultView adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+
+    public static String ITEM_TAG = "Receipt Item";
+
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +49,15 @@ public class ReceiptResultActivity extends AppCompatActivity implements Recycler
 
         ArrayList<IngredientItem> receiptResultItems = createReceiptItemsList();
 
+        //To editable detail screen
+        RecyclerViewAdapterReceiptResultView.ItemClickListener listener = new RecyclerViewAdapterReceiptResultView.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, String itemName) {
+                Intent intent = new Intent(ReceiptResultActivity.this, EditItemActivity.class);
+                intent.putExtra(ITEM_TAG, itemName);
+                startActivity(intent);
+            }
+        };
 
         //Get handle for view elements
         recyclerView = findViewById(R.id.rvReceiptResultList);
@@ -55,16 +67,15 @@ public class ReceiptResultActivity extends AppCompatActivity implements Recycler
         //Instantiate a linear recycler view layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerViewAdapterReceiptResultView(this, receiptResultItems);
-        adapter.setClickListener(this);
+        adapter = new RecyclerViewAdapterReceiptResultView(this, receiptResultItems, listener);
         recyclerView.setAdapter(adapter);
 
         //Format the recycler view for readibility and aesthetics
         SpacingItemDecorator itemDecorator = new SpacingItemDecorator(60, 50);
         recyclerView.addItemDecoration(itemDecorator);
 
+
         /*
-        TODO: hardcode in items from receipt
         TODO: figure out way to add those items into the pantry/fridge
         TODO: create method to edit the items on receiptresult + pantry screens
          */
@@ -80,8 +91,9 @@ public class ReceiptResultActivity extends AppCompatActivity implements Recycler
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
 
+
         try{
-            cal.setTime(df.parse(date.toString()));
+            cal.setTime(df.parse(df.format(date)));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -97,10 +109,10 @@ public class ReceiptResultActivity extends AppCompatActivity implements Recycler
         cal.add(Calendar.DAY_OF_MONTH, 30);
         String pankoDate = df.format(cal.getTime());
 
-        receiptItemsList.add(new IngredientItem("Iceberg Lettuce", lettuceDate, R.drawable.lettuce, 1));
-        receiptItemsList.add(new IngredientItem("WW RSPCA Chicken Mince 500g", chickenDate, R.drawable.chicken_leg, 1));
-        receiptItemsList.add(new IngredientItem("Mr Chens Pantry Panko Brd Crumb 250g", pankoDate, R.drawable.bread, 1));
-        receiptItemsList.add(new IngredientItem("Brioche Gourmet Burger Buns 4pk 250g", lettuceDate, R.drawable.bread, 1));
+        receiptItemsList.add(new IngredientItem("Iceberg Lettuce", lettuceDate, R.drawable.lettuce, "1"));
+        receiptItemsList.add(new IngredientItem("WW RSPCA Chicken Mince 500g", chickenDate, R.drawable.chicken_leg, "1"));
+        receiptItemsList.add(new IngredientItem("Mr Chens Pantry Panko Brd Crumb 250g", pankoDate, R.drawable.bread, "1"));
+        receiptItemsList.add(new IngredientItem("Brioche Gourmet Burger Buns 4pk 250g", lettuceDate, R.drawable.bread, "1"));
 
         return receiptItemsList;
     }
@@ -170,9 +182,9 @@ public class ReceiptResultActivity extends AppCompatActivity implements Recycler
     }
 
 
-    @Override
-    public void onItemClick(View view, int position) {
-
-    }
+//    @Override
+//    public void onItemClick(View view, int position) {
+//
+//    }
 
 }
