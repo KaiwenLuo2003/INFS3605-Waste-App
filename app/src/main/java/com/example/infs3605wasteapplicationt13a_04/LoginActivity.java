@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             signInLauncher.launch(signInIntent);
         } else{
             launchMainActivity();
-        }
+        } //figure out how to get the sign in launcher to welcome users back if their email exists instead of signing them up again
     }
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
@@ -67,6 +67,27 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, "Authentication failed");
         }
     }
+
+//    potensh?  https://stackoverflow.com/questions/51694424/how-to-check-user-email-already-exists-in-firebase-using-android-studio
+//    private void checkEmailExistsOrNot(){
+//        mAuth.fetchSignInMethodsForEmail(email.getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+//                Log.d(TAG,""+task.getResult().getSignInMethods().size());
+//                if (task.getResult().getSignInMethods().size() == 0){
+//                    // email not existed
+//                }else {
+//                    // email existed
+//                }
+//
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
+//    }
 
     public void launchMainActivity(){
         Intent intent = new Intent(this, MainActivity.class);
