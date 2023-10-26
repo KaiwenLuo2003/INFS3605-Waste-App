@@ -9,16 +9,17 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.R;
+import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 
 import java.util.List;
 
 public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<RecyclerViewAdapterReceiptResultView.ViewHolder>{
-    private List<String> mData;
+    private List<IngredientItem> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    RecyclerViewAdapterReceiptResultView(Context context, List<String> data) {
+    RecyclerViewAdapterReceiptResultView(Context context, List<IngredientItem> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -33,8 +34,8 @@ public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<R
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(RecyclerViewAdapterReceiptResultView.ViewHolder holder, int position) {
-        String pantryItem = mData.get(position);
-        holder.myTextView.setText(pantryItem);
+        IngredientItem ingredientItem = mData.get(position);
+        holder.myTextView.setText(ingredientItem.getItemName());
     }
 
     // total number of rows
@@ -66,7 +67,7 @@ public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<R
     }
 
     // allows clicks events to be caught
-    void setClickListener(RecyclerViewAdapterReceiptResultView.ItemClickListener itemClickListener) {
+    void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 

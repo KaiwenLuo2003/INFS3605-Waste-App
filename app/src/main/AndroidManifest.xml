@@ -17,11 +17,14 @@
         android:theme="@style/Theme.INFS3605WasteApplicationT13A_04"
         android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
-        <activity android:name=".ImgToTxtAPI.ReceiptResultActivity"
+
+        <activity
+            android:name=".ImgToTxtAPI.ReceiptResultActivity"
             android:exported="false"
             android:label="@string/title_activity_receipt_result"
-            android:theme="@style/Animation.Design.BottomSheetDialog"/>
-        <activity android:name=".LoadingActivity"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04"/>
+        <activity
+            android:name=".LoadingActivity"
             android:exported="false"
             android:label="@string/title_activity_loading_screen"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04"/>
