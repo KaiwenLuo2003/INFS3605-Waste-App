@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
+import com.example.infs3605wasteapplicationt13a_04.DBHandler;
 import com.example.infs3605wasteapplicationt13a_04.EditItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
@@ -38,6 +39,7 @@ public class ReceiptResultActivity extends AppCompatActivity {
     private RecyclerViewAdapterReceiptResultView adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private DBHandler dbHandler = new DBHandler(ReceiptResultActivity.this);
 
     public static String ITEM_TAG = "Receipt Item";
 
@@ -75,11 +77,6 @@ public class ReceiptResultActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecorator);
 
 
-        /*
-        TODO: figure out way to add those items into the pantry/fridge
-        TODO: create method to edit the items on receiptresult + pantry screens
-         */
-
     }
 
     public ArrayList<IngredientItem> createReceiptItemsList(){
@@ -109,10 +106,10 @@ public class ReceiptResultActivity extends AppCompatActivity {
         cal.add(Calendar.DAY_OF_MONTH, 30);
         String pankoDate = df.format(cal.getTime());
 
-        receiptItemsList.add(new IngredientItem("Iceberg Lettuce", lettuceDate, R.drawable.lettuce, "1"));
-        receiptItemsList.add(new IngredientItem("WW RSPCA Chicken Mince 500g", chickenDate, R.drawable.chicken_leg, "1"));
-        receiptItemsList.add(new IngredientItem("Mr Chens Pantry Panko Brd Crumb 250g", pankoDate, R.drawable.bread, "1"));
-        receiptItemsList.add(new IngredientItem("Brioche Gourmet Burger Buns 4pk 250g", lettuceDate, R.drawable.bread, "1"));
+        dbHandler.addIngredientItem("Iceberg Lettuce", lettuceDate, R.drawable.lettuce, "1");
+        dbHandler.addIngredientItem("WW RSPCA Chicken Mince 500g", chickenDate, R.drawable.chicken_leg, "1");
+        dbHandler.addIngredientItem("Mr Chens Pantry Panko Brd Crumb 250g", pankoDate, R.drawable.bread, "1");
+        dbHandler.addIngredientItem("Brioche Gourmet Burger Buns 4pk 250g", lettuceDate, R.drawable.bread, "1");
 
         return receiptItemsList;
     }
