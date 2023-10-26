@@ -1,7 +1,6 @@
 package com.example.infs3605wasteapplicationt13a_04.recipe;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +33,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +47,6 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
     private RecyclerViewAdapterRecipeView adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    //from kaiwens branch
     private static final String TAG = "recipeActivity";
     public static final String api_key = "fd4dad4847msh681f68c54f6e396p14017djsnd0c43955d9e8";
     public static final String api_url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
@@ -62,10 +59,6 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-
-        //recipe api stuff
-        OkHttpClient client = new OkHttpClient();//think its for the thread method not the retrofit
-
         //retrofit version
         Retrofit retrofit = new Retrofit.Builder().baseUrl(api_url)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -77,16 +70,15 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                //apiDetails.setText("working");
                 Log.d(TAG, "API CAll Success");
                 Log.d(TAG, response.toString());
                 String res = null;
                 try {
                     res = response.body().string();
+                    Log.d(TAG, response.body().string());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                //apiDetails.setText(res);
                 System.out.println(res);
                 String recipeJson = res;//up to this point recipeJson has all the json info, just need to split and assign to object
                 Gson gson = new Gson();
@@ -110,12 +102,6 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
 
         });
         //end of api stuff
-        //System.out.println(recipeList.get(0));//currently is not filled with data
-
-//        recipeNames.add("Cheesecake");
-//        recipeNames.add("Pasta bake");
-//        recipeNames.add("Lemonade");
-        //Temporary data to populate recyclerview
 
         //Get handle for view elements
         recyclerView = findViewById(R.id.rvRecipeList);
@@ -143,7 +129,7 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
     public void onItemClick(View view, int position) {
         Toast.makeText(this, "You clicked " + adapter.getItem(position).getTitle() + " on row number " + (position+1), Toast.LENGTH_SHORT).show();
         Recipe tempRecipe = recipeList.get(position);
-        launchRecipeDetail(INTENT_MESSAGE);
+        launchRecipeDetail(INTENT_MESSAGE, tempRecipe);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -210,9 +196,9 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
         startActivity(intent);
     }
 
-    public void launchRecipeDetail(String msg) {
+    public void launchRecipeDetail(String msg, Recipe recipe) {
         Intent intent = new Intent(RecipeActivity.this, RecipeDetail.class);
-        intent.putExtra(RecipeActivity.INTENT_MESSAGE, msg);
+        intent.putExtra(RecipeActivity.INTENT_MESSAGE, recipe.getId().toString());
         startActivity(intent);
     }
 }

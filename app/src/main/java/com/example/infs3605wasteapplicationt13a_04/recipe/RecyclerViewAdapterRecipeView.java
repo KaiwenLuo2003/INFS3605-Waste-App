@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.R;
 import com.example.infs3605wasteapplicationt13a_04.api.Recipe;
+import com.example.infs3605wasteapplicationt13a_04.ui.RecyclerViewInterface;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -19,9 +20,11 @@ public class RecyclerViewAdapterRecipeView extends RecyclerView.Adapter<Recycler
     private List<Recipe> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    Context mContext;
 
     // data is passed into the constructor
     RecyclerViewAdapterRecipeView(Context context, List<Recipe> data) {
+        mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
