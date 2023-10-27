@@ -1,13 +1,16 @@
 package com.example.infs3605wasteapplicationt13a_04.objects;
 
 public class IngredientItem {
+    private int id;
     private String itemName;
+    private String entryDate;
     private String expiryDate;
     private int icon;
     private String quantity;
 
 
-    public IngredientItem (String itemName, String expiryDate, int icon, String quantity){
+    public IngredientItem (int id, String itemName, String entryDate, String expiryDate, int icon, String quantity){
+        this.id = id;
         this.itemName = itemName;
         this.expiryDate = expiryDate;
         this.icon = icon;
@@ -15,12 +18,26 @@ public class IngredientItem {
     }
 
     //getters/setters
+    public int getId(){
+        return id;
+    }
+    public void setId(int id){
+        this.id = id;
+    }
     public String getItemName() {
         return itemName;
     }
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getEntryDate() {
+        return entryDate;
+    }
+
+    public void setEntryDate(String entryDate) {
+        this.expiryDate = entryDate;
     }
 
     public String getExpiryDate() {

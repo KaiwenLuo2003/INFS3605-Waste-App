@@ -2,18 +2,19 @@ package com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
+import com.example.infs3605wasteapplicationt13a_04.DBHandler;
 import com.example.infs3605wasteapplicationt13a_04.EditItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
@@ -31,13 +32,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class ReceiptResultActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private RecyclerViewAdapterReceiptResultView adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private DBHandler dbHandler = new DBHandler(ReceiptResultActivity.this);
+    private SQLiteDatabase db;
 
     public static String ITEM_TAG = "Receipt Item";
 
@@ -47,6 +49,7 @@ public class ReceiptResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_receipt_result);
 
 
+        db = dbHandler.getWritableDatabase();
         ArrayList<IngredientItem> receiptResultItems = createReceiptItemsList();
 
         //To editable detail screen
@@ -75,11 +78,6 @@ public class ReceiptResultActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecorator);
 
 
-        /*
-        TODO: figure out way to add those items into the pantry/fridge
-        TODO: create method to edit the items on receiptresult + pantry screens
-         */
-
     }
 
     public ArrayList<IngredientItem> createReceiptItemsList(){
@@ -89,11 +87,11 @@ public class ReceiptResultActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-
+        String today = df.format(date);
 
 
         try{
-            cal.setTime(df.parse(df.format(date)));
+            cal.setTime(df.parse(today));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -109,10 +107,12 @@ public class ReceiptResultActivity extends AppCompatActivity {
         cal.add(Calendar.DAY_OF_MONTH, 30);
         String pankoDate = df.format(cal.getTime());
 
-        receiptItemsList.add(new IngredientItem("Iceberg Lettuce", lettuceDate, R.drawable.lettuce, "1"));
-        receiptItemsList.add(new IngredientItem("WW RSPCA Chicken Mince 500g", chickenDate, R.drawable.chicken_leg, "1"));
-        receiptItemsList.add(new IngredientItem("Mr Chens Pantry Panko Brd Crumb 250g", pankoDate, R.drawable.bread, "1"));
-        receiptItemsList.add(new IngredientItem("Brioche Gourmet Burger Buns 4pk 250g", lettuceDate, R.drawable.bread, "1"));
+        dbHandler.addIngredientItem(db, "Iceberg Lettuce", today, lettuceDate, R.drawable.lettuce, "1");
+        dbHandler.addIngredientItem(db, "WW RSPCA Chicken Mince 500g", today, chickenDate, R.drawable.chicken_leg, "1");
+        dbHandler.addIngredientItem(db, "Mr Chens Pantry Panko Brd Crumb 250g", today, pankoDate, R.drawable.bread, "1");
+        dbHandler.addIngredientItem(db, "Brioche Gourmet Burger Buns 4pk 250g", today, lettuceDate, R.drawable.bread, "1");
+
+        receiptItemsList = dbHandler.getItemsByDate(today);
 
         return receiptItemsList;
     }
@@ -133,9 +133,9 @@ public class ReceiptResultActivity extends AppCompatActivity {
                     case R.id.pantryPage:
                         launchPantryActivity("Message from MainActivity");
                         return true;
-                    case R.id.cameraPage:
-                        launchAddItemActivity("Message from MainActivity");
-                        return true;
+//                    case R.id.cameraPage:
+//                        launchAddItemActivity("Message from MainActivity");
+//                        return true;
                     case R.id.recipesPage:
                         launchRecipeActivity("Message from HomeActivity");
                         return true;
@@ -151,11 +151,11 @@ public class ReceiptResultActivity extends AppCompatActivity {
     }
 
     //Methods to open new activities for navigation bar functionalities
-    public void launchAddItemActivity(String msg) {
-        Intent intent = new Intent(ReceiptResultActivity.this, AddItemActivity.class);
-        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
-        startActivity(intent);
-    }
+//    public void launchAddItemActivity(String msg) {
+//        Intent intent = new Intent(ReceiptResultActivity.this, AddItemActivity.class);
+//        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
+//        startActivity(intent);
+//    }
 
     public void launchPantryActivity(String msg) {
         Intent intent = new Intent(ReceiptResultActivity.this, PantryActivity.class);
