@@ -17,6 +17,7 @@ import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
+import com.example.infs3605wasteapplicationt13a_04.ui.RecyclerViewInterface;
 import com.example.infs3605wasteapplicationt13a_04.ui.SpacingItemDecorator;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -24,11 +25,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class PantryActivity extends AppCompatActivity implements RecyclerViewAdapterPantryView.ItemClickListener{
+public class PantryActivity extends AppCompatActivity implements RecyclerViewInterface {
     public static final String INTENT_MESSAGE = "intent_message";
     private BottomNavigationView bottomNavigationView;
 
-    private RecyclerViewAdapterPantryView adapter;
+    private PantryAdapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -38,15 +39,6 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewAda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry);
 
-        //Temporary data to populate recyclerview
-        ArrayList<String> pantryItemNames = new ArrayList<>();
-        pantryItemNames.add("Chocolate");
-        pantryItemNames.add("Cheese");
-        pantryItemNames.add("Lemon");
-
-
-
-
         //Get handle for view elements
         recyclerView = findViewById(R.id.rvPantryList);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -55,8 +47,7 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewAda
         //Instantiate a linear recycler view layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerViewAdapterPantryView(this, pantryItemNames);
-        adapter.setClickListener(this);
+        adapter = new PantryAdapter(Pantry.getPantry(), this);
         recyclerView.setAdapter(adapter);
 
 
@@ -136,8 +127,10 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewAda
     }
 
 
+
+
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(String symbol) {
 
     }
 }
