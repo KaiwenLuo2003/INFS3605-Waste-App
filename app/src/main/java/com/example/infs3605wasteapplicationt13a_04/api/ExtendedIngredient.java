@@ -4,7 +4,7 @@ package com.example.infs3605wasteapplicationt13a_04.api;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+//class for list of ingredients from recipe API, linked to the list of ingredients used in each recipe
 public class ExtendedIngredient {
 
     @SerializedName("id")

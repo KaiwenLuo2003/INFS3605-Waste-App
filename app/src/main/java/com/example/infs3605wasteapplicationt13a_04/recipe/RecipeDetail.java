@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
+import com.example.infs3605wasteapplicationt13a_04.api.ExtendedIngredient;
 import com.example.infs3605wasteapplicationt13a_04.api.Recipe;
 import com.example.infs3605wasteapplicationt13a_04.api.RecipeInfo;
 import com.example.infs3605wasteapplicationt13a_04.api.RecipeInterface;
@@ -21,8 +23,10 @@ import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -39,7 +43,13 @@ public class RecipeDetail extends AppCompatActivity {
     public static final String api_url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
     private BottomNavigationView bottomNavigationView;
     private int selectedRecipeId;
-    private TextView textView;
+    private TextView instructions;
+    private TextView link;
+    private TextView title;
+    private ImageView recipeImage;
+    private TextView usedIngredients;
+    private ArrayList<ExtendedIngredient> ingredientsList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +58,8 @@ public class RecipeDetail extends AppCompatActivity {
         Intent intent = getIntent();
 
         //parse selected recipe from the recyclerview here and find recipe ID
-        Recipe recipeFromList = new Recipe();
         if (intent.hasExtra(INTENT_MESSAGE)) {
-            selectedRecipeId = Integer.parseInt(intent.getStringExtra(INTENT_MESSAGE));
+            selectedRecipeId = Integer.parseInt(intent.getStringExtra(INTENT_MESSAGE));//parse selected recipe ID
             System.out.println(selectedRecipeId);
         } else {
             System.out.println("Did not return recipeID");
@@ -59,7 +68,12 @@ public class RecipeDetail extends AppCompatActivity {
         //Get handle for view elements
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.recipesPage);
-        textView = findViewById(R.id.tvInstruction);
+        instructions = findViewById(R.id.tvInstruction);
+        link = findViewById(R.id.tvLink);
+        title = findViewById(R.id.tvTitle);
+        recipeImage = findViewById(R.id.ivRecipe);
+        usedIngredients = findViewById(R.id.tvIngredients);
+
 
         //api calls
         Retrofit retrofit = new Retrofit.Builder().baseUrl(api_url)
@@ -81,17 +95,22 @@ public class RecipeDetail extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
                 System.out.println(res);
-                String recipeJson = res;//for some reason recipeJson is empty here, need to fix, could be the interface api call not working, havent tested that
+                String recipeJson = res;
                 Gson gson = new Gson();
 
+                //set view elements with recipe information
                 RecipeInfo recipeInfo = gson.fromJson(recipeJson, RecipeInfo.class);
-                System.out.println(recipeJson);
-                textView.setText(recipeInfo.getInstructions());
+                instructions.setText(recipeInfo.getInstructions());
+                link.setText(recipeInfo.getSourceUrl());
+                title.setText(recipeInfo.getTitle());
+                usedIngredients.setText("");
+                Picasso.get().load(recipeInfo.getImage()).into(recipeImage);
 
-                //recipeList.addAll(recipes);
-                //create arraylist of items based on the title of the api calls
-                //
-
+                //update arraylist of items based on the title of the api calls
+                ingredientsList.addAll(recipeInfo.getExtendedIngredients());
+                for (int i=0; i<ingredientsList.size(); i++) {
+                    usedIngredients.append(ingredientsList.get(i).getName()+"\n");
+                }
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {

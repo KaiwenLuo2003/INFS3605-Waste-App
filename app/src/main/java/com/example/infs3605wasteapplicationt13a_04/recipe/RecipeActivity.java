@@ -59,14 +59,15 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        //retrofit version
+        //retrofit api call
         Retrofit retrofit = new Retrofit.Builder().baseUrl(api_url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         RecipeInterface recipeAPI = retrofit.create(RecipeInterface.class);
-        Call<ResponseBody> call = recipeAPI.searchRecipeByIngredients("apples", 10, false, false, 1); //issue with this method, goes into fail route when calling api
-        //Call<ResponseBody> call = recipeAPI.searchRecipe("burger", false, "vegetarian", "", "", 1, 0, false, "");
+        //call made to api using method from RecipeInterface
+        Call<ResponseBody> call = recipeAPI.searchRecipeByIngredients("apples", 10, false, false, 1);
+        //call is enqueued
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -84,24 +85,22 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
                 Gson gson = new Gson();
                 Type collectionType = new TypeToken<Collection<Recipe>>() {
                 }.getType();
+                //adds list of recipes from api call into a collection to be added to an ArrayList
                 Collection<Recipe> recipes = gson.fromJson(recipeJson, collectionType);
                 recipeList.addAll(recipes);
                 //create arraylist of items based on the title of the api calls
-                //apiDetails.setText(first.get().getTitle());
                 for (int i = 0; i < recipeList.size(); i++) {
                     recipeNames.add(recipeList.get(i).getTitle());
-                    System.out.println(recipeNames.get(i));//currently its got the correct recipes, its just not showing up in the recyclerview
-                    adapter.notifyItemInserted(i);//temporary fix, item has been added to arrayList, but not sure if it would return the entire recipe when clicked on
+                    adapter.notifyItemInserted(i);
+                    //notifies the recyclerview that a new recipe has been added, needed as the onResponse method is loaded after the recyclerview is initialized
                 }
-
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "API Call Failed");
             }
-
         });
-        //end of api stuff
+        //end of api call
 
         //Get handle for view elements
         recyclerView = findViewById(R.id.rvRecipeList);
@@ -118,7 +117,6 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
         //Format the recycler view for readibility and aesthetics
         SpacingItemDecorator itemDecorator = new SpacingItemDecorator(60, 50);
         recyclerView.addItemDecoration(itemDecorator);
-
 
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();

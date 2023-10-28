@@ -36,14 +36,12 @@ public class RecyclerViewAdapterRecipeView extends RecyclerView.Adapter<Recycler
         return new ViewHolder(view);
     }
 
-    // binds the data to the TextView in each row
+    // binds the data to the TextView and ImageView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Recipe tempRecipe = mData.get(position);
-        //String recipeItem = mData.get(position);
         holder.myTextView.setText(tempRecipe.getTitle());
         Picasso.get().load(tempRecipe.getImage()).into(holder.myImageView);
-        //holder.myImageView.setImageBitmap();
     }
 
     // total number of rows
@@ -58,6 +56,7 @@ public class RecyclerViewAdapterRecipeView extends RecyclerView.Adapter<Recycler
         TextView myTextView;
         ImageView myImageView;
 
+        //binds view objects to respective elements in xml file
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.recipeName);

@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 //@Generated("jsonschema2pojo")
+//recipe object pulling from recipe api based on searching by ingredients
 public class Recipe {
     @SerializedName("id")
     @Expose
