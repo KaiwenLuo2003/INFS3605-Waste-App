@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">INFS3605 Waste Application T13A_04</string>
+    <string name="app_name">Pantry Pal</string>
     <string name="title_activity_add_receipt">AddReceiptActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -9,4 +9,6 @@
     <string name="title_activity_recipe">RecipeActivity</string>
     <string name="title_recipe_detail">RecipeDetail</string>
     <string name="title_activity_recycle">RecycleActivity</string>
+    <string name="title_activity_loading_screen">LoadingActivity</string>
+    <string name="title_activity_receipt_result">ReceiptResult</string>
 </resources>

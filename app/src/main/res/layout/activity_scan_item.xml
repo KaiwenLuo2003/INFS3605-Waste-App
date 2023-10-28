@@ -27,15 +27,18 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="39dp"
         android:layout_marginBottom="473dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/scanItemLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +57,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/scanItemLinearLayout"
         android:layout_width="198dp"
         android:layout_height="52dp"
         android:layout_marginTop="546dp"
@@ -68,7 +71,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/buttonText"
             android:layout_width="140dp"
             android:layout_height="29dp"
             android:layout_weight="1"
@@ -95,14 +98,16 @@
 
     <androidx.constraintlayout.utils.widget.ImageFilterButton
         android:id="@+id/imageFilterButton"
-        android:layout_width="349dp"
-        android:layout_height="360dp"
-        android:layout_marginTop="165dp"
-        android:layout_marginBottom="321dp"
+        android:layout_width="381dp"
+        android:layout_height="451dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="196dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.333"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 </androidx.constraintlayout.widget.ConstraintLayout>
