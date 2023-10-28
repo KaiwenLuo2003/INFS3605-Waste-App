@@ -33,7 +33,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.gMap = googleMap;
-        LatLng mapAus = new LatLng(-33.865143, 151.209900);
+        LatLng mapAus = new LatLng(-33.959420, 151.226710);
         this.gMap.addMarker(new MarkerOptions().position(mapAus).title("Marker in Aus"));
         this.gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapAus, 16));
 
