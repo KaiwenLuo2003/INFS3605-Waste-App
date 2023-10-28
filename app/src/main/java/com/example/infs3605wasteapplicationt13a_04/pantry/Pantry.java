@@ -40,6 +40,6 @@ public class Pantry {
         pantry.add(new Pantry("Chocolate","250g", "20/12/2023", R.drawable.chocolate_icon));
         return pantry;
     }
-
-
 }
+
+

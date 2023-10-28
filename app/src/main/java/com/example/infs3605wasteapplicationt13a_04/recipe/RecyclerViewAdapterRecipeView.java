@@ -4,21 +4,27 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.R;
+import com.example.infs3605wasteapplicationt13a_04.api.Recipe;
+import com.example.infs3605wasteapplicationt13a_04.ui.RecyclerViewInterface;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class RecyclerViewAdapterRecipeView extends RecyclerView.Adapter<RecyclerViewAdapterRecipeView.ViewHolder> {
-    private List<String> mData;
+    private List<Recipe> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    Context mContext;
 
     // data is passed into the constructor
-    RecyclerViewAdapterRecipeView(Context context, List<String> data) {
+    RecyclerViewAdapterRecipeView(Context context, List<Recipe> data) {
+        mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -30,11 +36,12 @@ public class RecyclerViewAdapterRecipeView extends RecyclerView.Adapter<Recycler
         return new ViewHolder(view);
     }
 
-    // binds the data to the TextView in each row
+    // binds the data to the TextView and ImageView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String recipeItem = mData.get(position);
-        holder.myTextView.setText(recipeItem);
+        Recipe tempRecipe = mData.get(position);
+        holder.myTextView.setText(tempRecipe.getTitle());
+        Picasso.get().load(tempRecipe.getImage()).into(holder.myImageView);
     }
 
     // total number of rows
@@ -47,10 +54,13 @@ public class RecyclerViewAdapterRecipeView extends RecyclerView.Adapter<Recycler
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
+        ImageView myImageView;
 
+        //binds view objects to respective elements in xml file
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.recipeName);
+            myImageView = itemView.findViewById(R.id.ivArt);
             itemView.setOnClickListener(this);
         }
 
@@ -61,7 +71,7 @@ public class RecyclerViewAdapterRecipeView extends RecyclerView.Adapter<Recycler
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
+    Recipe getItem(int id) {
         return mData.get(id);
     }
 

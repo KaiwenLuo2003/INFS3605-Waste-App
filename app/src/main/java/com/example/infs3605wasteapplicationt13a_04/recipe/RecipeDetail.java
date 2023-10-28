@@ -1,37 +1,32 @@
 package com.example.infs3605wasteapplicationt13a_04.recipe;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
+import com.example.infs3605wasteapplicationt13a_04.R;
+import com.example.infs3605wasteapplicationt13a_04.api.ExtendedIngredient;
 import com.example.infs3605wasteapplicationt13a_04.api.Recipe;
+import com.example.infs3605wasteapplicationt13a_04.api.RecipeInfo;
 import com.example.infs3605wasteapplicationt13a_04.api.RecipeInterface;
 import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
-import com.example.infs3605wasteapplicationt13a_04.R;
-import com.example.infs3605wasteapplicationt13a_04.ui.SpacingItemDecorator;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.common.reflect.TypeToken;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -40,34 +35,53 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RecipeActivity extends AppCompatActivity implements RecyclerViewAdapterRecipeView.ItemClickListener {
-    public static final String INTENT_MESSAGE = "intent_message";
-    private BottomNavigationView bottomNavigationView;
+public class RecipeDetail extends AppCompatActivity {
 
-    private RecyclerViewAdapterRecipeView adapter;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private static final String TAG = "recipeActivity";
+    public static final String INTENT_MESSAGE = "intent_message";
+    private static final String TAG = "recipeDetail";
     public static final String api_key = "fd4dad4847msh681f68c54f6e396p14017djsnd0c43955d9e8";
     public static final String api_url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
-    public ArrayList<String> recipeNames = new ArrayList<>();
-    public ArrayList<Recipe> recipeList = new ArrayList<>();
+    private BottomNavigationView bottomNavigationView;
+    private int selectedRecipeId;
+    private TextView instructions;
+    private TextView link;
+    private TextView title;
+    private ImageView recipeImage;
+    private TextView usedIngredients;
+    private ArrayList<ExtendedIngredient> ingredientsList = new ArrayList<>();
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe);
+        setContentView(R.layout.recipe_detail);
+        System.out.println("loaded detail recipe");
+        Intent intent = getIntent();
 
-        //retrofit api call
+        //parse selected recipe from the recyclerview here and find recipe ID
+        if (intent.hasExtra(INTENT_MESSAGE)) {
+            selectedRecipeId = Integer.parseInt(intent.getStringExtra(INTENT_MESSAGE));//parse selected recipe ID
+            System.out.println(selectedRecipeId);
+        } else {
+            System.out.println("Did not return recipeID");
+        }
+
+        //Get handle for view elements
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.recipesPage);
+        instructions = findViewById(R.id.tvInstruction);
+        link = findViewById(R.id.tvLink);
+        title = findViewById(R.id.tvTitle);
+        recipeImage = findViewById(R.id.ivRecipe);
+        usedIngredients = findViewById(R.id.tvIngredients);
+
+
+        //api calls
         Retrofit retrofit = new Retrofit.Builder().baseUrl(api_url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         RecipeInterface recipeAPI = retrofit.create(RecipeInterface.class);
-        //call made to api using method from RecipeInterface
-        Call<ResponseBody> call = recipeAPI.searchRecipeByIngredients("apples", 10, false, false, 1);
-        //call is enqueued
+        Call<ResponseBody> call = recipeAPI.searchRecipeById(selectedRecipeId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -81,54 +95,32 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
                     throw new RuntimeException(e);
                 }
                 System.out.println(res);
-                String recipeJson = res;//up to this point recipeJson has all the json info, just need to split and assign to object
+                String recipeJson = res;
                 Gson gson = new Gson();
-                Type collectionType = new TypeToken<Collection<Recipe>>() {
-                }.getType();
-                //adds list of recipes from api call into a collection to be added to an ArrayList
-                Collection<Recipe> recipes = gson.fromJson(recipeJson, collectionType);
-                recipeList.addAll(recipes);
-                //create arraylist of items based on the title of the api calls
-                for (int i = 0; i < recipeList.size(); i++) {
-                    recipeNames.add(recipeList.get(i).getTitle());
-                    adapter.notifyItemInserted(i);
-                    //notifies the recyclerview that a new recipe has been added, needed as the onResponse method is loaded after the recyclerview is initialized
+
+                //set view elements with recipe information
+                RecipeInfo recipeInfo = gson.fromJson(recipeJson, RecipeInfo.class);
+                instructions.setText(recipeInfo.getInstructions());
+                link.setText(recipeInfo.getSourceUrl());
+                title.setText(recipeInfo.getTitle());
+                usedIngredients.setText("");
+                Picasso.get().load(recipeInfo.getImage()).into(recipeImage);
+
+                //update arraylist of items based on the title of the api calls
+                ingredientsList.addAll(recipeInfo.getExtendedIngredients());
+                for (int i=0; i<ingredientsList.size(); i++) {
+                    usedIngredients.append(ingredientsList.get(i).getName()+"\n");
                 }
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "API Call Failed");
             }
+
         });
-        //end of api call
 
-        //Get handle for view elements
-        recyclerView = findViewById(R.id.rvRecipeList);
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.recipesPage);
-
-        //Instantiate a linear recycler view layout manager
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerViewAdapterRecipeView(this, recipeList);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-
-        //Format the recycler view for readibility and aesthetics
-        SpacingItemDecorator itemDecorator = new SpacingItemDecorator(60, 50);
-        recyclerView.addItemDecoration(itemDecorator);
-
-        //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
     }
 
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + adapter.getItem(position).getTitle() + " on row number " + (position+1), Toast.LENGTH_SHORT).show();
-        Recipe tempRecipe = recipeList.get(position);
-        launchRecipeDetail(INTENT_MESSAGE, tempRecipe);
-    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -162,41 +154,35 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
         return false;
     }
 
-
     //Methods to open new activities for navigation bar functionalities
     public void launchAddItemActivity(String msg) {
-        Intent intent = new Intent(RecipeActivity.this, AddItemActivity.class);
+        Intent intent = new Intent(RecipeDetail.this, AddItemActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 
     public void launchPantryActivity(String msg) {
-        Intent intent = new Intent(RecipeActivity.this, PantryActivity.class);
+        System.out.println("hello");
+        Intent intent = new Intent(RecipeDetail.this, PantryActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 
     public void launchRecipeActivity(String msg) {
-        Intent intent = new Intent(RecipeActivity.this, RecipeActivity.class);
+        Intent intent = new Intent(RecipeDetail.this, RecipeActivity.class);
         intent.putExtra(RecipeActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 
     public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(RecipeActivity.this, MapActivity.class);
+        Intent intent = new Intent(RecipeDetail.this, MapActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
 
     public void launchHomePageActivity(String msg) {
-        Intent intent = new Intent(RecipeActivity.this, MainActivity.class);
+        Intent intent = new Intent(RecipeDetail.this, MainActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
-        startActivity(intent);
-    }
-
-    public void launchRecipeDetail(String msg, Recipe recipe) {
-        Intent intent = new Intent(RecipeActivity.this, RecipeDetail.class);
-        intent.putExtra(RecipeActivity.INTENT_MESSAGE, recipe.getId().toString());
         startActivity(intent);
     }
 }
