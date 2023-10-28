@@ -2,6 +2,7 @@ package com.example.infs3605wasteapplicationt13a_04.pantry;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,9 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
+import com.example.infs3605wasteapplicationt13a_04.DBHandler;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
+import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
 import com.example.infs3605wasteapplicationt13a_04.ui.RecyclerViewInterface;
 import com.example.infs3605wasteapplicationt13a_04.ui.SpacingItemDecorator;
@@ -24,6 +27,8 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class PantryActivity extends AppCompatActivity implements RecyclerViewInterface {
     public static final String INTENT_MESSAGE = "intent_message";
@@ -32,12 +37,19 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewInt
     private PantryAdapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private IngredientItem item;
+
+    private DBHandler dbHandler = new DBHandler(PantryActivity.this);
+    private SQLiteDatabase db;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry);
+
+        db = dbHandler.getReadableDatabase();
+        ArrayList<IngredientItem> pantryList = getPantryItems();
 
         //Get handle for view elements
         recyclerView = findViewById(R.id.rvPantryList);
@@ -47,7 +59,7 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewInt
         //Instantiate a linear recycler view layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new PantryAdapter(Pantry.getPantry(), this);
+        adapter = new PantryAdapter(pantryList, this);
         recyclerView.setAdapter(adapter);
 
 
@@ -55,10 +67,11 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewInt
         SpacingItemDecorator itemDecorator = new SpacingItemDecorator(60, 50);
         recyclerView.addItemDecoration(itemDecorator);
 
+    }
 
-        //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    public ArrayList<IngredientItem> getPantryItems(){
+        ArrayList<IngredientItem> results = dbHandler.getItems();
+        return results;
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

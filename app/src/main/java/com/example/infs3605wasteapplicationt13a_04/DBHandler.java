@@ -9,16 +9,22 @@ import android.util.Log;
 
 import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
 public class DBHandler extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "pantryPalDB.db";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 6;
     private static final String TAG = "DBHandler";
     private static DBHandler dbHandler;
+    private SQLiteDatabase db;
 
 
     public DBHandler(@Nullable Context context){
@@ -45,6 +51,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(ingredientItemQuery);
         Log.d(TAG, "INGREDIENT_ITEMS table created");
 
+        addPresetIngredientItems(db);
+
     }
 
     @Override
@@ -58,6 +66,41 @@ public class DBHandler extends SQLiteOpenHelper {
     public void dropTable(String tableName, SQLiteDatabase db){
         SQLiteStatement stmt = db.compileStatement("DROP TABLE IF EXISTS " + tableName);
         stmt.execute();
+    }
+
+    private void addPresetIngredientItems(SQLiteDatabase db) {
+        //set up fake dates
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String today = df.format(date);
+
+        try{
+            cal.setTime(df.parse(today));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        //1 week before
+        cal.add(Calendar.DAY_OF_MONTH, -7);
+        String minus7Days = df.format(cal.getTime());
+
+        //1.5 weeks before
+        cal.add(Calendar.DAY_OF_MONTH, -4);
+        String minus11Days = df.format(cal.getTime());
+
+        //Banana expiry date
+        cal.add(Calendar.DAY_OF_MONTH, 9);
+        String bananaExpiry = df.format(cal.getTime());
+
+        //chocolate expiry date
+        cal.add(Calendar.DAY_OF_MONTH, 188);
+        String chocolateExpiry = df.format(cal.getTime());
+
+        addIngredientItem(db, "Lindt Dark Chocolate", minus11Days, chocolateExpiry, R.drawable.chocolate_icon, "250g");
+        addIngredientItem(db, "Pink Lady Apples", minus11Days, today, R.drawable.apple_icon, "5");
+        addIngredientItem(db, "Banana", minus7Days, bananaExpiry, R.drawable.banana_icon, "7");
+
     }
 
     public void addIngredientItem(SQLiteDatabase db, String itemName, String entryDate, String expiryDate, int iconId, String quantity){

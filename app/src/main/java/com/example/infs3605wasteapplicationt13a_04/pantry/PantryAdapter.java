@@ -4,6 +4,8 @@ import static com.example.infs3605wasteapplicationt13a_04.R.*;
 import static com.example.infs3605wasteapplicationt13a_04.R.drawable.*;
 import static com.google.common.collect.Iterators.size;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +16,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.R;
+import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 import com.example.infs3605wasteapplicationt13a_04.ui.RecyclerViewInterface;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHolder> {
     private final RecyclerViewInterface recyclerViewInterface;
-    private ArrayList<Pantry> mItems;
+    private ArrayList<IngredientItem> mItems;
 
-    public PantryAdapter(ArrayList<Pantry> items, RecyclerViewInterface recyclerViewInterface) {
+    public PantryAdapter(ArrayList<IngredientItem> items, RecyclerViewInterface recyclerViewInterface) {
         this.recyclerViewInterface = recyclerViewInterface;
         this.mItems = items;
     }
@@ -35,15 +43,44 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
     }
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull PantryAdapter.MyViewHolder holder, int position) {
-        Pantry items = mItems.get(position);
-        holder.name.setText(items.getItem());
-        String item = items.getItem();
-        holder.expiry.setText(items.getExpiry());
-        holder.quantity.setText(items.getExpiry());
-        holder.image.setImageResource(items.getImage());
-        
+        IngredientItem ingredientItem = mItems.get(position);
+        holder.name.setText(ingredientItem.getItemName());
+        String item = ingredientItem.getItemName();
+        holder.expiry.setText(ingredientItem.getExpiryDate());
+        holder.quantity.setText(ingredientItem.getQuantity());
+        holder.image.setImageResource(ingredientItem.getIcon());
+
+
+        //Background highlight based on expiry date
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        Date todayDate = cal.getTime();
+
+        //parse ingredientItem String date to Date object
+        try {
+            Date expiryDate = df.parse(ingredientItem.getExpiryDate());
+
+            //compare dates
+            if(todayDate.compareTo(expiryDate) > 0){
+                //If item expired, turn background red
+                int redColor = Color.parseColor("#F87676");
+                holder.itemView.setBackgroundColor(redColor);
+            } else if(todayDate.compareTo(expiryDate) == 0){
+                //If item expiring today, turn background yellow
+                int yellowColor = Color.parseColor("#FFBF00");
+                holder.itemView.setBackgroundColor(yellowColor);
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+//        String today = df.format(date);
+
+
+
 
     }
 
