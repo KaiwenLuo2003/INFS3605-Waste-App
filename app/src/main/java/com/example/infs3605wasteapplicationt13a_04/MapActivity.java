@@ -52,7 +52,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
              mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
 
-             mMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList.get(i)));
+             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationArrayList.get(i), 16));
         }
     }
 }
