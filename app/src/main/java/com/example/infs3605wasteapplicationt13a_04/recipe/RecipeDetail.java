@@ -1,11 +1,14 @@
 package com.example.infs3605wasteapplicationt13a_04.recipe;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,7 +47,8 @@ public class RecipeDetail extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private int selectedRecipeId;
     private TextView instructions;
-    private TextView link;
+    private String link;
+    private Button openLink;
     private TextView title;
     private ImageView recipeImage;
     private TextView usedIngredients;
@@ -69,7 +73,7 @@ public class RecipeDetail extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.recipesPage);
         instructions = findViewById(R.id.tvInstruction);
-        link = findViewById(R.id.tvLink);
+        openLink = findViewById(R.id.button3);
         title = findViewById(R.id.tvTitle);
         recipeImage = findViewById(R.id.ivRecipe);
         usedIngredients = findViewById(R.id.tvIngredients);
@@ -101,10 +105,18 @@ public class RecipeDetail extends AppCompatActivity {
                 //set view elements with recipe information
                 RecipeInfo recipeInfo = gson.fromJson(recipeJson, RecipeInfo.class);
                 instructions.setText(recipeInfo.getInstructions());
-                link.setText(recipeInfo.getSourceUrl());
+                link = recipeInfo.getSourceUrl();
+
                 title.setText(recipeInfo.getTitle());
                 usedIngredients.setText("");
                 Picasso.get().load(recipeInfo.getImage()).into(recipeImage);
+
+                openLink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
+                    }
+                });
 
                 //update arraylist of items based on the title of the api calls
                 ingredientsList.addAll(recipeInfo.getExtendedIngredients());
