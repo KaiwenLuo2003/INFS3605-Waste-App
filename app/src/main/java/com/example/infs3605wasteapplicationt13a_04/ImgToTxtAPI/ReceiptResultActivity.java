@@ -31,17 +31,19 @@ public class ReceiptResultActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private Button confirmButton;
-    private DBHandler dbHandler = new DBHandler(ReceiptResultActivity.this);
+    private final DBHandler dbHandler = new DBHandler(ReceiptResultActivity.this);
     private SQLiteDatabase db;
     private static List<IngredientItem> receiptResultItems = new ArrayList<IngredientItem>();
 
+
     public static String ITEM_TAG = "Receipt Item";
+    public static String ACTIVITY_INDICATOR = "Activity Indicator";
+    public static int activityIndicator = 1;
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipt_result);
-
 
         db = dbHandler.getWritableDatabase();
         receiptResultItems = createReceiptItemsList();
@@ -52,6 +54,7 @@ public class ReceiptResultActivity extends AppCompatActivity {
             public void onItemClick(View view, String itemName) {
                 Intent intent = new Intent(ReceiptResultActivity.this, EditItemActivity.class);
                 intent.putExtra(ITEM_TAG, itemName);
+                intent.putExtra(ACTIVITY_INDICATOR, activityIndicator);
                 startActivity(intent);
             }
         };
@@ -66,7 +69,7 @@ public class ReceiptResultActivity extends AppCompatActivity {
         adapter = new RecyclerViewAdapterReceiptResultView(this, receiptResultItems, listener);
         recyclerView.setAdapter(adapter);
 
-        //Format the recycler view for readibility and aesthetics
+        //Format the recycler view for readability and aesthetics
         SpacingItemDecorator itemDecorator = new SpacingItemDecorator(60, 50);
         recyclerView.addItemDecoration(itemDecorator);
 

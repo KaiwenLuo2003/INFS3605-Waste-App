@@ -15,16 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.DBHandler;
+import com.example.infs3605wasteapplicationt13a_04.EditItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
 import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
-import com.example.infs3605wasteapplicationt13a_04.ui.RecyclerViewInterface;
 import com.example.infs3605wasteapplicationt13a_04.ui.SpacingItemDecorator;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,27 +31,40 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class PantryActivity extends AppCompatActivity implements RecyclerViewInterface {
-    public static final String INTENT_MESSAGE = "intent_message";
+public class PantryActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
     private static PantryAdapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private IngredientItem item;
-    private static ArrayList<IngredientItem> pantryList = new ArrayList<IngredientItem>();
+    private static ArrayList<IngredientItem> pantryList = new ArrayList<>();
 
-    private DBHandler dbHandler = new DBHandler(PantryActivity.this);
+    private final DBHandler dbHandler = new DBHandler(PantryActivity.this);
+
     private SQLiteDatabase db;
 
+    public static String ITEM_TAG = "Pantry Item";
+    public static String ACTIVITY_INDICATOR = "Activity Indicator";
+    public static int activityIndicator = 2;
+
     @SuppressLint("MissingInflatedId")
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry);
 
         db = dbHandler.getReadableDatabase();
         pantryList = getPantryItems();
+
+        //To editable detail screen
+        PantryAdapter.ItemClickListener listener = new PantryAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, String itemName) {
+                Intent intent = new Intent(PantryActivity.this, EditItemActivity.class);
+                intent.putExtra(ITEM_TAG, itemName);
+                intent.putExtra(ACTIVITY_INDICATOR, activityIndicator);
+                startActivity(intent);
+            }
+        };
 
         //Get handle for view elements
         recyclerView = findViewById(R.id.rvPantryList);
@@ -62,13 +74,14 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewInt
         //Instantiate a linear recycler view layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new PantryAdapter(pantryList, this);
+        adapter = new PantryAdapter(this, pantryList, listener);
         recyclerView.setAdapter(adapter);
 
 
-        //Format the recycler view for readibility and aesthetics
+        //Format the recycler view for readability and aesthetics
         SpacingItemDecorator itemDecorator = new SpacingItemDecorator(60, 50);
         recyclerView.addItemDecoration(itemDecorator);
+
 
     }
 
@@ -154,11 +167,4 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewInt
         startActivity(intent);
     }
 
-
-
-
-    @Override
-    public void onItemClick(String symbol) {
-
-    }
 }

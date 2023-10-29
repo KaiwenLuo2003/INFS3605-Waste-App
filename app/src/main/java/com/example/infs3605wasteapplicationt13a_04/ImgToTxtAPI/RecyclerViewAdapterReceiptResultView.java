@@ -18,6 +18,7 @@ public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<R
     private List<IngredientItem> mItems;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+
     public IngredientItem item;
 
     // data is passed into the constructor
@@ -72,16 +73,6 @@ public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<R
                 mClickListener.onItemClick(view, (String) mItems.get(this.getLayoutPosition()).getItemName());
             }
         }
-    }
-
-    // convenience method for getting data at click position
-    String getItem(int id) {
-        return mItems.get(id).getItemName();
-    }
-
-    // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
     }
 
     // parent activity will implement this method to respond to click events

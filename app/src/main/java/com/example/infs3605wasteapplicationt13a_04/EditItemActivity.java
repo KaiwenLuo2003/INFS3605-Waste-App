@@ -14,12 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.ReceiptResultActivity;
 import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
+import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class EditItemActivity extends AppCompatActivity{
 
     private static final String TAG = "EditItemActivity";
-    private DBHandler dbHandler = new DBHandler(EditItemActivity.this);
+    private final DBHandler dbHandler = new DBHandler(EditItemActivity.this);
 
     private ImageView itemImg;
     private TextInputEditText editItemName;
@@ -37,8 +38,15 @@ public class EditItemActivity extends AppCompatActivity{
         setContentView(R.layout.activity_edit_item);
 
         //Init. item from intent
+        //if intExtra = 1 --> from ReceiptResultActivity
+        //if inExtra = 2 --> from PantryActivity
         Intent intent = getIntent();
-        itemName = intent.getStringExtra(ReceiptResultActivity.ITEM_TAG);
+
+        if(intent.getIntExtra(ReceiptResultActivity.ACTIVITY_INDICATOR, 1) == 1){
+            itemName = intent.getStringExtra(ReceiptResultActivity.ITEM_TAG);
+        } else if(intent.getIntExtra(PantryActivity.ACTIVITY_INDICATOR, 2) == 2){
+            itemName = intent.getStringExtra(PantryActivity.ITEM_TAG);
+        }
         item = dbHandler.getItemByName(itemName);
 
         //Init. display objects
@@ -65,17 +73,19 @@ public class EditItemActivity extends AppCompatActivity{
                 //update database
                 dbHandler.updateIngredientItem(item);
                 Log.d(TAG, "Ingredient details updated");
-                ReceiptResultActivity.updateRecyclerView(dbHandler);
-                Intent returnIntent = new Intent(EditItemActivity.this, ReceiptResultActivity.class);
-                startActivity(returnIntent);
+
+                if(intent.getIntExtra(ReceiptResultActivity.ACTIVITY_INDICATOR, 1) == 1){
+                    ReceiptResultActivity.updateRecyclerView(dbHandler);
+                    Intent returnToReceiptResult = new Intent(EditItemActivity.this, ReceiptResultActivity.class);
+                    startActivity(returnToReceiptResult);
+                }
+                else if(intent.getIntExtra(PantryActivity.ACTIVITY_INDICATOR, 2) == 2){
+                    PantryActivity.updateRecyclerView(dbHandler);
+                    Intent returnToPantry = new Intent(EditItemActivity.this, PantryActivity.class);
+                    startActivity(returnToPantry);
+                }
+
             }
         });
-
-        /*
-        TODO: figure out how to have multiple intents from multiple screens
-        TODO: figure out how to update/set the text in the database (save button?)
-         */
-
-
     }
 }
