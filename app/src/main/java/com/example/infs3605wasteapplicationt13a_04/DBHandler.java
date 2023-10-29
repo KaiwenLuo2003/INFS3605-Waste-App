@@ -1,5 +1,6 @@
 package com.example.infs3605wasteapplicationt13a_04;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -176,6 +177,18 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
         return item;
+    }
+
+    public void updateIngredientItem(IngredientItem item){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String id = String.valueOf(item.getId());
+
+        ContentValues cv = new ContentValues();
+        cv.put("ITEM_NAME", item.getItemName());
+        cv.put("EXPIRY_DATE", item.getExpiryDate());
+        cv.put("QUANTITY", item.getQuantity());
+
+        db.update("INGREDIENT_ITEMS", cv, "id = ?", new String[]{id});
     }
 
     public void deleteItem(IngredientItem item){

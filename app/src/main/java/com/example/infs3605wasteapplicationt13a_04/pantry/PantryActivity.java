@@ -26,18 +26,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class PantryActivity extends AppCompatActivity implements RecyclerViewInterface {
     public static final String INTENT_MESSAGE = "intent_message";
     private BottomNavigationView bottomNavigationView;
 
-    private PantryAdapter adapter;
+    private static PantryAdapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private IngredientItem item;
+    private static ArrayList<IngredientItem> pantryList = new ArrayList<IngredientItem>();
 
     private DBHandler dbHandler = new DBHandler(PantryActivity.this);
     private SQLiteDatabase db;
@@ -49,7 +52,7 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewInt
         setContentView(R.layout.activity_pantry);
 
         db = dbHandler.getReadableDatabase();
-        ArrayList<IngredientItem> pantryList = getPantryItems();
+        pantryList = getPantryItems();
 
         //Get handle for view elements
         recyclerView = findViewById(R.id.rvPantryList);
@@ -72,6 +75,18 @@ public class PantryActivity extends AppCompatActivity implements RecyclerViewInt
     public ArrayList<IngredientItem> getPantryItems(){
         ArrayList<IngredientItem> results = dbHandler.getItems();
         return results;
+    }
+
+    public static void updateRecyclerView(DBHandler dbHandler){
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String today = df.format(date);
+
+        pantryList.clear();
+        pantryList = dbHandler.getItemsByDate(today);
+        adapter.updateList(pantryList);
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

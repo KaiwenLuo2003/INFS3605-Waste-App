@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHolder> {
@@ -101,5 +102,11 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
             expiry = itemView.findViewById(id.tvExpiry);
             quantity = itemView.findViewById(id.tvPortion);
         }
+    }
+
+    public void updateList(List<IngredientItem> refreshedItemList){
+        mItems.clear();
+        mItems.addAll(refreshedItemList);
+        this.notifyDataSetChanged();
     }
 }
