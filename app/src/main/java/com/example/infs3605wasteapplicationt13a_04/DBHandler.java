@@ -1,5 +1,6 @@
 package com.example.infs3605wasteapplicationt13a_04;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -158,6 +159,38 @@ public class DBHandler extends SQLiteOpenHelper {
         return results;
     }
 
+    public IngredientItem getItemByName(String itemName){
+        IngredientItem item = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM INGREDIENT_ITEMS WHERE ITEM_NAME = ?", new String[] {itemName});
+
+        cursor.moveToFirst();
+        while(cursor.isAfterLast() == false){
+            item = new IngredientItem(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getInt(4),
+                    cursor.getString(5)
+            );
+            cursor.moveToNext();
+        }
+        return item;
+    }
+
+    public void updateIngredientItem(IngredientItem item){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String id = String.valueOf(item.getId());
+
+        ContentValues cv = new ContentValues();
+        cv.put("ITEM_NAME", item.getItemName());
+        cv.put("EXPIRY_DATE", item.getExpiryDate());
+        cv.put("QUANTITY", item.getQuantity());
+
+        db.update("INGREDIENT_ITEMS", cv, "id = ?", new String[]{id});
+    }
+
     public void deleteItem(IngredientItem item){
         SQLiteDatabase db = getWritableDatabase();
         String whereClause = "id=?";
@@ -166,7 +199,4 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    /*
-        TODO: create method to edit the items on receiptresult + pantry screens
-         */
 }

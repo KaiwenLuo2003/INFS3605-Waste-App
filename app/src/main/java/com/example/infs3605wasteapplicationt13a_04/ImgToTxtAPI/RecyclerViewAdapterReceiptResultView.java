@@ -15,14 +15,16 @@ import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 import java.util.List;
 
 public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<RecyclerViewAdapterReceiptResultView.ViewHolder>{
-    private List<IngredientItem> mData;
+    private List<IngredientItem> mItems;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+
+    public IngredientItem item;
 
     // data is passed into the constructor
     RecyclerViewAdapterReceiptResultView(Context context, List<IngredientItem> data, ItemClickListener listener) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        this.mItems = data;
         this.mClickListener = listener;
     }
 
@@ -36,17 +38,17 @@ public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<R
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(RecyclerViewAdapterReceiptResultView.ViewHolder holder, int position) {
-        IngredientItem ingredientItem = mData.get(position);
-        holder.itemName.setText(ingredientItem.getItemName());
-        holder.expiryDate.setText(ingredientItem.getExpiryDate());
-        holder.portion.setText("Qty: " + ingredientItem.getQuantity());
-        holder.itemImg.setImageResource(ingredientItem.getIcon());
+        item = mItems.get(position);
+        holder.itemName.setText(item.getItemName());
+        holder.expiryDate.setText(item.getExpiryDate());
+        holder.portion.setText("Qty: " + item.getQuantity());
+        holder.itemImg.setImageResource(item.getIcon());
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mItems.size();
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -67,22 +69,21 @@ public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<R
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, (String) view.getTag());
+            if (mClickListener != null) {
+                mClickListener.onItemClick(view, (String) mItems.get(this.getLayoutPosition()).getItemName());
+            }
         }
-    }
-
-    // convenience method for getting data at click position
-    String getItem(int id) {
-        return mData.get(id).getItemName();
-    }
-
-    // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
     }
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, String itemName);
     }
+
+    public void updateList(List<IngredientItem> refreshedItemList){
+        mItems.clear();
+        mItems.addAll(refreshedItemList);
+        this.notifyDataSetChanged();
+    }
+
 }

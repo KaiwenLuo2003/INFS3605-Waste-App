@@ -4,53 +4,49 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.DBHandler;
 import com.example.infs3605wasteapplicationt13a_04.EditItemActivity;
-import com.example.infs3605wasteapplicationt13a_04.MainActivity;
-import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
 import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
-import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
 import com.example.infs3605wasteapplicationt13a_04.ui.SpacingItemDecorator;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ReceiptResultActivity extends AppCompatActivity {
-    private BottomNavigationView bottomNavigationView;
-    private RecyclerViewAdapterReceiptResultView adapter;
+    private static RecyclerViewAdapterReceiptResultView adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private DBHandler dbHandler = new DBHandler(ReceiptResultActivity.this);
+    private Button confirmButton;
+    private final DBHandler dbHandler = new DBHandler(ReceiptResultActivity.this);
     private SQLiteDatabase db;
+    private static List<IngredientItem> receiptResultItems = new ArrayList<IngredientItem>();
+
 
     public static String ITEM_TAG = "Receipt Item";
+    public static String ACTIVITY_INDICATOR = "Activity Indicator";
+    public static int activityIndicator = 1;
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipt_result);
 
-
         db = dbHandler.getWritableDatabase();
-        ArrayList<IngredientItem> receiptResultItems = createReceiptItemsList();
+        receiptResultItems = createReceiptItemsList();
 
         //To editable detail screen
         RecyclerViewAdapterReceiptResultView.ItemClickListener listener = new RecyclerViewAdapterReceiptResultView.ItemClickListener() {
@@ -58,14 +54,14 @@ public class ReceiptResultActivity extends AppCompatActivity {
             public void onItemClick(View view, String itemName) {
                 Intent intent = new Intent(ReceiptResultActivity.this, EditItemActivity.class);
                 intent.putExtra(ITEM_TAG, itemName);
+                intent.putExtra(ACTIVITY_INDICATOR, activityIndicator);
                 startActivity(intent);
             }
         };
 
         //Get handle for view elements
         recyclerView = findViewById(R.id.rvReceiptResultList);
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.cameraPage);
+        confirmButton = findViewById(R.id.confirmButton);
 
         //Instantiate a linear recycler view layout manager
         layoutManager = new LinearLayoutManager(this);
@@ -73,10 +69,19 @@ public class ReceiptResultActivity extends AppCompatActivity {
         adapter = new RecyclerViewAdapterReceiptResultView(this, receiptResultItems, listener);
         recyclerView.setAdapter(adapter);
 
-        //Format the recycler view for readibility and aesthetics
+        //Format the recycler view for readability and aesthetics
         SpacingItemDecorator itemDecorator = new SpacingItemDecorator(60, 50);
         recyclerView.addItemDecoration(itemDecorator);
 
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent seePantry = new Intent(ReceiptResultActivity.this, PantryActivity.class);
+                startActivity(seePantry);
+            }
+        });
 
     }
 
@@ -117,74 +122,17 @@ public class ReceiptResultActivity extends AppCompatActivity {
         return receiptItemsList;
     }
 
+    public static void updateRecyclerView(DBHandler dbHandler){
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String today = df.format(date);
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
+        receiptResultItems.clear();
+        receiptResultItems = dbHandler.getItemsByDate(today);
+        adapter.updateList(receiptResultItems);
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.homePage:
-                        launchHomePageActivity("Message from MainActivity");
-                        System.out.print("recipe");
-                        return true;
-                    case R.id.pantryPage:
-                        launchPantryActivity("Message from MainActivity");
-                        return true;
-//                    case R.id.cameraPage:
-//                        launchAddItemActivity("Message from MainActivity");
-//                        return true;
-                    case R.id.recipesPage:
-                        launchRecipeActivity("Message from HomeActivity");
-                        return true;
-                    case R.id.recyclePage:
-                        launchRecycleActivity("Message from MainActivity");
-                        return true;
-                }
-
-                return false;
-            }
-        });
-        return false;
     }
 
-    //Methods to open new activities for navigation bar functionalities
-//    public void launchAddItemActivity(String msg) {
-//        Intent intent = new Intent(ReceiptResultActivity.this, AddItemActivity.class);
-//        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
-//        startActivity(intent);
-//    }
-
-    public void launchPantryActivity(String msg) {
-        Intent intent = new Intent(ReceiptResultActivity.this, PantryActivity.class);
-        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
-        startActivity(intent);
-    }
-
-    public void launchRecipeActivity(String msg) {
-        Intent intent = new Intent(ReceiptResultActivity.this, RecipeActivity.class);
-        intent.putExtra(RecipeActivity.INTENT_MESSAGE, msg);
-        startActivity(intent);
-    }
-
-    public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(ReceiptResultActivity.this, MapActivity.class);
-        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
-        startActivity(intent);
-    }
-
-    public void launchHomePageActivity(String msg) {
-        Intent intent = new Intent(ReceiptResultActivity.this, MainActivity.class);
-        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
-        startActivity(intent);
-    }
-
-
-//    @Override
-//    public void onItemClick(View view, int position) {
-//
-//    }
 
 }
