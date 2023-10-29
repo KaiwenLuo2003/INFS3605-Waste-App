@@ -52,9 +52,10 @@
             android:label="@string/title_recipe_detail"
             android:theme="@style/Theme.INFS3605WasteApplicationT13A_04" />
         <activity
-
             android:name=".MapActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_map"
+            android:theme="@style/Theme.INFS3605WasteApplicationT13A_04"/>
         <activity
             android:name=".LoginActivity"
             android:exported="true">

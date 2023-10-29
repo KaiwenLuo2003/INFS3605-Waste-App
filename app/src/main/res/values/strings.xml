@@ -11,4 +11,5 @@
     <string name="title_activity_recycle">RecycleActivity</string>
     <string name="title_activity_loading_screen">LoadingActivity</string>
     <string name="title_activity_receipt_result">ReceiptResult</string>
+    <string name="title_activity_map">MapActivity</string>
 </resources>
