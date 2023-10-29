@@ -18,6 +18,7 @@ public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<R
     private List<IngredientItem> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    public IngredientItem item;
 
     // data is passed into the constructor
     RecyclerViewAdapterReceiptResultView(Context context, List<IngredientItem> data, ItemClickListener listener) {
@@ -36,11 +37,11 @@ public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<R
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(RecyclerViewAdapterReceiptResultView.ViewHolder holder, int position) {
-        IngredientItem ingredientItem = mData.get(position);
-        holder.itemName.setText(ingredientItem.getItemName());
-        holder.expiryDate.setText(ingredientItem.getExpiryDate());
-        holder.portion.setText("Qty: " + ingredientItem.getQuantity());
-        holder.itemImg.setImageResource(ingredientItem.getIcon());
+        item = mData.get(position);
+        holder.itemName.setText(item.getItemName());
+        holder.expiryDate.setText(item.getExpiryDate());
+        holder.portion.setText("Qty: " + item.getQuantity());
+        holder.itemImg.setImageResource(item.getIcon());
     }
 
     // total number of rows
@@ -67,7 +68,9 @@ public class RecyclerViewAdapterReceiptResultView extends RecyclerView.Adapter<R
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, (String) view.getTag());
+            if (mClickListener != null) {
+                mClickListener.onItemClick(view, (String) mData.get(this.getLayoutPosition()).getItemName());
+            }
         }
     }
 

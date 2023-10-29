@@ -158,6 +158,26 @@ public class DBHandler extends SQLiteOpenHelper {
         return results;
     }
 
+    public IngredientItem getItemByName(String itemName){
+        IngredientItem item = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM INGREDIENT_ITEMS WHERE ITEM_NAME = ?", new String[] {itemName});
+
+        cursor.moveToFirst();
+        while(cursor.isAfterLast() == false){
+            item = new IngredientItem(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getInt(4),
+                    cursor.getString(5)
+            );
+            cursor.moveToNext();
+        }
+        return item;
+    }
+
     public void deleteItem(IngredientItem item){
         SQLiteDatabase db = getWritableDatabase();
         String whereClause = "id=?";
@@ -166,7 +186,4 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    /*
-        TODO: create method to edit the items on receiptresult + pantry screens
-         */
 }
