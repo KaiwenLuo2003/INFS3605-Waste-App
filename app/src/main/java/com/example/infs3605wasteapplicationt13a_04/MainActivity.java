@@ -1,5 +1,7 @@
 package com.example.infs3605wasteapplicationt13a_04;
 
+import static android.text.TextUtils.split;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.Manifest;
@@ -37,6 +39,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import okhttp3.Credentials;
 import okhttp3.MediaType;
@@ -51,6 +55,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     //Declarations
+    private final DBHandler dbHandler = new DBHandler(MainActivity.this);
     public static final String INTENT_MESSAGE = "intent_message";
     private BottomNavigationView bottomNavigationView;
     private RelativeLayout pantry;
@@ -62,8 +67,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView itemsExpiringNotice;
     private TextView locationInformation;
     private TextView usersName;
+    private TextView pantryStatus;
+    private TextView userGreeting;
 
     private static final String apiKey = "41d2114f-6a73-11ee-b75c-9ab569923c64";
+
+    private String userName;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int STORAGE_PERMISSION_REQUEST_CODE = 1;
@@ -91,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
         itemsExpiringNotice = findViewById(R.id.itemExpiringTV);
         locationInformation = findViewById(R.id.locationTV);
         usersName = findViewById(R.id.userNameTV);
+        pantryStatus = findViewById(R.id.pantryStatus);
+        userGreeting = findViewById(R.id.userGreeting);
+
+        //Update Status
+        String itemCount = String.valueOf(dbHandler.getItems().size());
+        pantryStatus.setText(itemCount + " items in Pantry");
 
         shop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,12 +128,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        disposalOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchRecycleActivity("Message from HomeAcivity");
+            }
+        });
+
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         //Find user details from Firebase then set personalised title
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        usersName.setText(user.getDisplayName());
+        userName = user.getDisplayName();
+        usersName.setText(userName);
+        userGreeting.setText(userName + "!");
 
         // Check and request permissions when needed
         requestCameraPermissions();
