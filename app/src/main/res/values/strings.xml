@@ -12,4 +12,5 @@
     <string name="title_activity_loading_screen">LoadingActivity</string>
     <string name="title_activity_receipt_result">ReceiptResult</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="home">Back</string>
 </resources>
