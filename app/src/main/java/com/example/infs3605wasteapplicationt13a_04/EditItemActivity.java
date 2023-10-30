@@ -48,6 +48,7 @@ public class EditItemActivity extends AppCompatActivity{
             itemName = intent.getStringExtra(PantryActivity.ITEM_TAG);
         }
         item = dbHandler.getItemByName(itemName);
+        setTitle("Edit " + itemName);
 
         //Init. display objects
         itemImg = findViewById(R.id.itemImage);

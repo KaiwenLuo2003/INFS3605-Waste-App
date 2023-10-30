@@ -58,6 +58,7 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        setTitle("Recipes");
 
         //retrofit api call
         Retrofit retrofit = new Retrofit.Builder().baseUrl(api_url)

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.DBHandler;
 import com.example.infs3605wasteapplicationt13a_04.EditItemActivity;
+import com.example.infs3605wasteapplicationt13a_04.LoginActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
@@ -24,6 +25,7 @@ import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
 import com.example.infs3605wasteapplicationt13a_04.ui.SpacingItemDecorator;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class PantryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry);
+        setTitle("Pantry");
 
         db = dbHandler.getReadableDatabase();
         pantryList = getPantryItems();
@@ -104,7 +107,7 @@ public class PantryActivity extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
+        inflater.inflate(R.menu.recyclerview_menu, menu);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -134,6 +137,23 @@ public class PantryActivity extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    // React to user interaction with the menu
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.alphabetSortItem:
+                return true;
+            case R.id.expirySortItem:
+                return true;
+            case R.id.entryDateSortItem:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    /*
+    TODO: finish creating sorting methods
+     */
 
 
     //Methods to open new activities for navigation bar functionalities

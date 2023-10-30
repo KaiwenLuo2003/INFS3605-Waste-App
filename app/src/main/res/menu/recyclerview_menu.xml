@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/sorting"
+        android:title="Filter Options"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/alphabetSortItem"
+                android:title="A-Z" />
+            <item
+                android:id="@+id/expirySortItem"
+                android:title="Expiry Date" />
+            <item
+                android:id="@+id/entryDateSortItem"
+                android:title="Entry Date" />
+        </menu>
+    </item>
+
+</menu>

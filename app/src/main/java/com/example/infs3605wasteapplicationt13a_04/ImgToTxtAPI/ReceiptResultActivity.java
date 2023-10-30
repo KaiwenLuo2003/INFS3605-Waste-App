@@ -44,6 +44,7 @@ public class ReceiptResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipt_result);
+        setTitle("Results");
 
         db = dbHandler.getWritableDatabase();
         receiptResultItems = createReceiptItemsList();
