@@ -103,7 +103,7 @@ public class PantryActivity extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.recyclerview_menu, menu);
+        inflater.inflate(R.menu.options_menu, menu);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -133,35 +133,46 @@ public class PantryActivity extends AppCompatActivity {
         return false;
     }
 
+//    @Override
+//    // React to user interaction with the menu
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.alphabetSortItem:
+//                Collections.sort(pantryList, new Comparator<IngredientItem>() {
+//                    @Override
+//                    public int compare(IngredientItem t1, IngredientItem t2) {
+//                        return t1.getItemName().compareToIgnoreCase(t2.getItemName());
+//                    }
+//                });
+//                mAdapter.notifyDataSetChanged();
+//            case R.id.expirySortItem:
+//                Collections.sort(pantryList, new Comparator<IngredientItem>() {
+//                    @Override
+//                    public int compare(IngredientItem t1, IngredientItem t2) {
+//                        return t1.getExpiryDate().compareTo(t2.getExpiryDate());
+//                    }
+//                });
+//                mAdapter.notifyDataSetChanged();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+
     @Override
     // React to user interaction with the menu
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.alphabetSortItem:
-                Collections.sort(pantryList, new Comparator<IngredientItem>() {
-                    @Override
-                    public int compare(IngredientItem t1, IngredientItem t2) {
-                        return t1.getItemName().compareToIgnoreCase(t2.getItemName());
-                    }
-                });
-                mAdapter.notifyDataSetChanged();
-            case R.id.expirySortItem:
-                Collections.sort(pantryList, new Comparator<IngredientItem>() {
-                    @Override
-                    public int compare(IngredientItem t1, IngredientItem t2) {
-                        return t1.getExpiryDate().compareTo(t2.getExpiryDate());
-                    }
-                });
-                mAdapter.notifyDataSetChanged();
+            case R.id.accountMenuItem:
+                return true;
+            case R.id.logOutMenuItem:
+                FirebaseAuth.getInstance().signOut();
+                returnToLogIn("Message from HomeActivity");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-    /*
-    TODO: finish creating sorting methods
-    TODO: add "Dispose" and "Eaten" buttons to editview --> both use dbhandler delete function
-     */
 
 
     //Methods to open new activities for navigation bar functionalities
@@ -195,4 +206,9 @@ public class PantryActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void returnToLogIn(String msg) {
+        Intent intent = new Intent(PantryActivity.this, LoginActivity.class);
+        intent.putExtra(LoginActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
 }
