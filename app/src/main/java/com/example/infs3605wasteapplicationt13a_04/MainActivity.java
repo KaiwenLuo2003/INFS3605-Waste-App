@@ -259,7 +259,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.homePage:
                         launchHomePageActivity("Message from MainActivity");
-                        System.out.print("recipe");
                         return true;
                     case R.id.pantryPage:
                         launchPantryActivity("Message from MainActivity");

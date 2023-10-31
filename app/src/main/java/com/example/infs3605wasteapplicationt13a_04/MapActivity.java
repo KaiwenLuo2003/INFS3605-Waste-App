@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
@@ -38,6 +40,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private ArrayList<LatLng> locationArrayList;
     private ArrayList<String> nameArrayList;
     private BottomNavigationView bottomNavigationView;
+    private ImageView home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
         //Get handle for view elements
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        home = findViewById(R.id.backHome);
         bottomNavigationView.setSelectedItemId(R.id.recyclePage);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchHomePageActivity("Message from HomeActivity");
+            }
+        });
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -66,20 +76,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        for (int i = 0; i < locationArrayList.size(); i++) {
 
-            mMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).title(nameArrayList.get(i)));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationArrayList.get(i), 15));
-        }
-    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
+
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -110,6 +112,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
 
     //Methods to open new activities for navigation bar functionalities
+
     public void launchAddItemActivity(String msg) {
         Intent intent = new Intent(MapActivity.this, AddItemActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
@@ -117,7 +120,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     public void launchPantryActivity(String msg) {
-        System.out.println("hello");
         Intent intent = new Intent(MapActivity.this, PantryActivity.class);
         intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
@@ -146,4 +148,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         startActivity(intent);
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        for (int i = 0; i < locationArrayList.size(); i++) {
+
+            mMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).title(nameArrayList.get(i)));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationArrayList.get(i), 15));
+        }
+    }
 }
