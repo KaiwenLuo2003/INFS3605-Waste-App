@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.infs3605wasteapplicationt13a_04.R;
 import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 
 import java.text.ParseException;
@@ -52,6 +53,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
         holder.expiry.setText(ingredientItem.getExpiryDate());
         holder.quantity.setText(ingredientItem.getQuantity());
         holder.image.setImageResource(ingredientItem.getIcon());
+        holder.expiryDesc.setText("est. expiry");
 
 
         //Background highlight based on expiry date
@@ -65,9 +67,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
 
             //compare dates
             if(todayDate.compareTo(expiryDate) > 0){
-                //If item expired, turn background red
+                //If item expired, turn background red, text white
                 int redColor = Color.parseColor("#F87676");
+                int whiteColor = Color.parseColor("#FFFFFF");
                 holder.itemView.setBackgroundColor(redColor);
+                holder.expiryDesc.setText("EXPIRED");
+                holder.expiryDesc.setTextColor(whiteColor);
+                holder.name.setTextColor(whiteColor);
+                holder.expiry.setTextColor(whiteColor);
             } else if(todayDate.compareTo(expiryDate) == 0){
                 //If item expiring today, turn background yellow
                 int yellowColor = Color.parseColor("#FFBF00");
@@ -90,12 +97,15 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
         TextView expiry;
         TextView quantity;
 
+        TextView expiryDesc;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(id.ivArt);
             name = itemView.findViewById(id.tvName);
             expiry = itemView.findViewById(id.tvExpiry);
             quantity = itemView.findViewById(id.tvPortion);
+            expiryDesc = itemView.findViewById(id.expiryDescription);
             itemView.setOnClickListener(this);
         }
 
@@ -111,7 +121,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
         void onItemClick(View view, String itemName);
     }
 
-    public void updateList(List<IngredientItem> refreshedItemList){
+    public void updateList(ArrayList<IngredientItem> refreshedItemList){
         mItems.clear();
         mItems.addAll(refreshedItemList);
         this.notifyDataSetChanged();
