@@ -13,9 +13,6 @@
             <item
                 android:id="@+id/expirySortItem"
                 android:title="Expiry Date" />
-            <item
-                android:id="@+id/entryDateSortItem"
-                android:title="Entry Date" />
         </menu>
     </item>
 

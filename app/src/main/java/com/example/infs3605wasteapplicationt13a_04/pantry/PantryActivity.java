@@ -30,6 +30,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -94,15 +96,9 @@ public class PantryActivity extends AppCompatActivity {
     }
 
     public static void updateRecyclerView(DBHandler dbHandler){
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        String today = df.format(date);
-
         pantryList.clear();
-        pantryList = dbHandler.getItemsByDate(today);
+        pantryList = dbHandler.getItems();
         adapter.updateList(pantryList);
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -142,10 +138,21 @@ public class PantryActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.alphabetSortItem:
-                return true;
+                Collections.sort(pantryList, new Comparator<IngredientItem>() {
+                    @Override
+                    public int compare(IngredientItem t1, IngredientItem t2) {
+                        return t1.getItemName().compareToIgnoreCase(t2.getItemName());
+                    }
+                });
+                adapter.updateList(pantryList);
             case R.id.expirySortItem:
-                return true;
-            case R.id.entryDateSortItem:
+                Collections.sort(pantryList, new Comparator<IngredientItem>() {
+                    @Override
+                    public int compare(IngredientItem t1, IngredientItem t2) {
+                        return t1.getExpiryDate().compareTo(t2.getExpiryDate());
+                    }
+                });
+                adapter.updateList(pantryList);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -153,6 +160,7 @@ public class PantryActivity extends AppCompatActivity {
     }
     /*
     TODO: finish creating sorting methods
+    TODO: add "Dispose" and "Eaten" buttons to editview --> both use dbhandler delete function
      */
 
 
