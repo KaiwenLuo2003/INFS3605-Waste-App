@@ -34,6 +34,8 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="15dp"
         android:hint="Item Name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,10 +70,10 @@
         android:id="@+id/quantityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
+        android:layout_marginEnd="50dp"
         android:text="Quantity:"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toEndOf="@+id/expiryDateLabel"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/expiryDateLabel" />
 
     <com.google.android.material.textfield.TextInputEditText
@@ -100,7 +102,7 @@
         android:layout_width="52dp"
         android:layout_height="79dp"
         android:layout_marginStart="71dp"
-        android:layout_marginTop="69dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editItemExpiryDate"
         app:srcCompat="@drawable/bin" />
@@ -109,7 +111,7 @@
         android:id="@+id/eatenIcon"
         android:layout_width="116dp"
         android:layout_height="62dp"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editItemQuantity"
@@ -120,9 +122,11 @@
         android:layout_width="105dp"
         android:layout_height="50dp"
         android:layout_marginStart="44dp"
+        android:layout_marginBottom="35dp"
         android:backgroundTint="@color/black"
         android:text="Dispose"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/saveButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/binIcon" />
 
@@ -134,6 +138,6 @@
         android:backgroundTint="@color/green"
         android:text="Eaten"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/binIcon" />
+        app:layout_constraintTop_toTopOf="@+id/disposeButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

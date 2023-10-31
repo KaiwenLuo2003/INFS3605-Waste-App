@@ -38,7 +38,7 @@ import java.util.Locale;
 public class PantryActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
-    private static PantryAdapter adapter;
+    private static PantryAdapter mAdapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private static ArrayList<IngredientItem> pantryList = new ArrayList<>();
@@ -79,8 +79,8 @@ public class PantryActivity extends AppCompatActivity {
         //Instantiate a linear recycler view layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new PantryAdapter(this, pantryList, listener);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new PantryAdapter(this, pantryList, listener);
+        recyclerView.setAdapter(mAdapter);
 
 
         //Format the recycler view for readability and aesthetics
@@ -98,7 +98,7 @@ public class PantryActivity extends AppCompatActivity {
     public static void updateRecyclerView(DBHandler dbHandler){
         pantryList.clear();
         pantryList = dbHandler.getItems();
-        adapter.updateList(pantryList);
+        mAdapter.updateList(pantryList);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,7 +144,7 @@ public class PantryActivity extends AppCompatActivity {
                         return t1.getItemName().compareToIgnoreCase(t2.getItemName());
                     }
                 });
-                adapter.updateList(pantryList);
+                mAdapter.notifyDataSetChanged();
             case R.id.expirySortItem:
                 Collections.sort(pantryList, new Comparator<IngredientItem>() {
                     @Override
@@ -152,7 +152,7 @@ public class PantryActivity extends AppCompatActivity {
                         return t1.getExpiryDate().compareTo(t2.getExpiryDate());
                     }
                 });
-                adapter.updateList(pantryList);
+                mAdapter.notifyDataSetChanged();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

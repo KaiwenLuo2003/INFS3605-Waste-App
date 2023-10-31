@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 public class DBHandler extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "pantryPalDB.db";
-    private static final int DB_VERSION = 7;
+    private static final int DB_VERSION = 8;
     private static final String TAG = "DBHandler";
     private static DBHandler dbHandler;
     private SQLiteDatabase db;
