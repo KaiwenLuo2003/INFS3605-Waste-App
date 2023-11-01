@@ -20,7 +20,7 @@
         android:id="@+id/tvExpiry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="8dp"
         android:text="Expiry"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="@+id/tvName"
@@ -48,5 +48,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvExpiry" />
+
+    <TextView
+        android:id="@+id/expiryDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="est. expiry"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/tvExpiry"
+        app:layout_constraintTop_toBottomOf="@+id/tvExpiry" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

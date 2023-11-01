@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.DBHandler;
 import com.example.infs3605wasteapplicationt13a_04.EditItemActivity;
+import com.example.infs3605wasteapplicationt13a_04.LoginActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
 import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
@@ -24,17 +25,20 @@ import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
 import com.example.infs3605wasteapplicationt13a_04.ui.SpacingItemDecorator;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
 public class PantryActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
-    private static PantryAdapter adapter;
+    private static PantryAdapter mAdapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private static ArrayList<IngredientItem> pantryList = new ArrayList<>();
@@ -51,6 +55,7 @@ public class PantryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry);
+        setTitle("Pantry");
 
         db = dbHandler.getReadableDatabase();
         pantryList = getPantryItems();
@@ -74,8 +79,8 @@ public class PantryActivity extends AppCompatActivity {
         //Instantiate a linear recycler view layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new PantryAdapter(this, pantryList, listener);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new PantryAdapter(this, pantryList, listener);
+        recyclerView.setAdapter(mAdapter);
 
 
         //Format the recycler view for readability and aesthetics
@@ -91,15 +96,9 @@ public class PantryActivity extends AppCompatActivity {
     }
 
     public static void updateRecyclerView(DBHandler dbHandler){
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        String today = df.format(date);
-
         pantryList.clear();
-        pantryList = dbHandler.getItemsByDate(today);
-        adapter.updateList(pantryList);
-
+        pantryList = dbHandler.getItems();
+        mAdapter.updateList(pantryList);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -131,6 +130,46 @@ public class PantryActivity extends AppCompatActivity {
         return false;
     }
 
+//    @Override
+//    // React to user interaction with the menu
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.alphabetSortItem:
+//                Collections.sort(pantryList, new Comparator<IngredientItem>() {
+//                    @Override
+//                    public int compare(IngredientItem t1, IngredientItem t2) {
+//                        return t1.getItemName().compareToIgnoreCase(t2.getItemName());
+//                    }
+//                });
+//                mAdapter.notifyDataSetChanged();
+//            case R.id.expirySortItem:
+//                Collections.sort(pantryList, new Comparator<IngredientItem>() {
+//                    @Override
+//                    public int compare(IngredientItem t1, IngredientItem t2) {
+//                        return t1.getExpiryDate().compareTo(t2.getExpiryDate());
+//                    }
+//                });
+//                mAdapter.notifyDataSetChanged();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+
+    @Override
+    // React to user interaction with the menu
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.accountMenuItem:
+                return true;
+            case R.id.logOutMenuItem:
+                FirebaseAuth.getInstance().signOut();
+                returnToLogIn("Message from HomeActivity");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
     //Methods to open new activities for navigation bar functionalities
@@ -160,4 +199,9 @@ public class PantryActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void returnToLogIn(String msg) {
+        Intent intent = new Intent(PantryActivity.this, LoginActivity.class);
+        intent.putExtra(LoginActivity.INTENT_MESSAGE, msg);
+        startActivity(intent);
+    }
 }

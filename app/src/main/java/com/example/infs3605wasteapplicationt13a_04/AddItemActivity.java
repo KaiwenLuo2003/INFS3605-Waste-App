@@ -55,7 +55,7 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_item);
-
+        setTitle("Add a shop");
 
         //Get handle for view elements
         bottomNavigationView = findViewById(R.id.bottomNavigationView);

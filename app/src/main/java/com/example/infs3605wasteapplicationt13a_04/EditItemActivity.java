@@ -27,6 +27,11 @@ public class EditItemActivity extends AppCompatActivity{
     private TextInputEditText editItemQuantity;
     private TextView editExpiryDate;
     private Button saveButton;
+    private Button eatenButton;
+    private Button disposalButton;
+
+    private ImageView binIcon;
+    private ImageView eatenIcon;
 
     private IngredientItem item;
     private String itemName;
@@ -37,6 +42,17 @@ public class EditItemActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
 
+        //Init. display objects
+        itemImg = findViewById(R.id.itemImage);
+        editItemName = findViewById(R.id.editItemName);
+        editItemQuantity = findViewById(R.id.editItemQuantity);
+        editExpiryDate = findViewById(R.id.editItemExpiryDate);
+        saveButton = findViewById(R.id.saveButton);
+        eatenButton = findViewById(R.id.eatenButton);
+        disposalButton = findViewById(R.id.disposeButton);
+        eatenIcon = findViewById(R.id.eatenIcon);
+        binIcon = findViewById(R.id.binIcon);
+
         //Init. item from intent
         //if intExtra = 1 --> from ReceiptResultActivity
         //if inExtra = 2 --> from PantryActivity
@@ -44,17 +60,18 @@ public class EditItemActivity extends AppCompatActivity{
 
         if(intent.getIntExtra(ReceiptResultActivity.ACTIVITY_INDICATOR, 1) == 1){
             itemName = intent.getStringExtra(ReceiptResultActivity.ITEM_TAG);
+            eatenButton.setVisibility(View.GONE);
+            disposalButton.setVisibility(View.GONE);
+            eatenIcon.setVisibility(View.GONE);
+            binIcon.setVisibility(View.GONE);
+
         } else if(intent.getIntExtra(PantryActivity.ACTIVITY_INDICATOR, 2) == 2){
             itemName = intent.getStringExtra(PantryActivity.ITEM_TAG);
         }
         item = dbHandler.getItemByName(itemName);
+        setTitle("Edit " + itemName);
 
-        //Init. display objects
-        itemImg = findViewById(R.id.itemImage);
-        editItemName = findViewById(R.id.editItemName);
-        editItemQuantity = findViewById(R.id.editItemQuantity);
-        editExpiryDate = findViewById(R.id.editItemExpiryDate);
-        saveButton = findViewById(R.id.saveButton);
+
 
         //set data
         itemImg.setImageResource(item.getIcon());
@@ -85,6 +102,30 @@ public class EditItemActivity extends AppCompatActivity{
                     startActivity(returnToPantry);
                 }
 
+            }
+        });
+
+        eatenButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                dbHandler.deleteItem(item);
+                Log.d(TAG, "Ingredient details deleted");
+
+                PantryActivity.updateRecyclerView(dbHandler);
+                Intent returnToPantry = new Intent(EditItemActivity.this, PantryActivity.class);
+                startActivity(returnToPantry);
+            }
+        });
+
+        disposalButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                dbHandler.deleteItem(item);
+                Log.d(TAG, "Ingredient details deleted");
+
+                PantryActivity.updateRecyclerView(dbHandler);
+                Intent returnToPantry = new Intent(EditItemActivity.this, PantryActivity.class);
+                startActivity(returnToPantry);
             }
         });
     }
