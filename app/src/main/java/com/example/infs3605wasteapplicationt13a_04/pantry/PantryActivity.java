@@ -123,9 +123,6 @@ public class PantryActivity extends AppCompatActivity {
                     case R.id.recipesPage:
                         launchRecipeActivity("Message from HomeActivity");
                         return true;
-                    case R.id.recyclePage:
-                        launchRecycleActivity("Message from MainActivity");
-                        return true;
                 }
 
                 return false;
@@ -155,11 +152,7 @@ public class PantryActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(PantryActivity.this, MapActivity.class);
-        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
-        startActivity(intent);
-    }
+
 
     public void launchHomePageActivity(String msg) {
         Intent intent = new Intent(PantryActivity.this, MainActivity.class);

@@ -148,9 +148,6 @@ public class AddItemActivity extends AppCompatActivity {
                     case R.id.recipesPage:
                         launchRecipeActivity("Message from HomeActivity");
                         return true;
-                    case R.id.recyclePage:
-                        launchRecycleActivity("Message from MainActivity");
-                        return true;
                 }
 
                 return false;
@@ -200,11 +197,6 @@ public class AddItemActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(AddItemActivity.this, MapActivity.class);
-        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
-        startActivity(intent);
-    }
 
     public void launchHomePageActivity(String msg) {
         Intent intent = new Intent(AddItemActivity.this, MainActivity.class);

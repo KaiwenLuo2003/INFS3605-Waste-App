@@ -155,9 +155,6 @@ public class RecipeDetail extends AppCompatActivity {
                     case R.id.recipesPage:
                         launchRecipeActivity("Message from HomeActivity");
                         return true;
-                    case R.id.recyclePage:
-                        launchRecycleActivity("Message from MainActivity");
-                        return true;
                 }
 
                 return false;

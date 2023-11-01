@@ -151,9 +151,6 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
                     case R.id.recipesPage:
                         launchRecipeActivity("Message from HomeActivity");
                         return true;
-                    case R.id.recyclePage:
-                        launchRecycleActivity("Message from MainActivity");
-                        return true;
                 }
 
                 return false;
@@ -182,11 +179,6 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
         startActivity(intent);
     }
 
-    public void launchRecycleActivity(String msg) {
-        Intent intent = new Intent(RecipeActivity.this, MapActivity.class);
-        intent.putExtra(AddItemActivity.INTENT_MESSAGE, msg);
-        startActivity(intent);
-    }
 
     public void launchHomePageActivity(String msg) {
         Intent intent = new Intent(RecipeActivity.this, MainActivity.class);

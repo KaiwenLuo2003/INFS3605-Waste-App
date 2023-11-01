@@ -48,9 +48,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         setContentView(R.layout.activity_map);
 
         //Get handle for view elements
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         home = findViewById(R.id.backHome);
-        bottomNavigationView.setSelectedItemId(R.id.recyclePage);
+
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,37 +77,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
 
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
-
-
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.homePage:
-                        launchHomePageActivity("Message from MainActivity");
-                        return true;
-                    case R.id.pantryPage:
-                        launchPantryActivity("Message from MainActivity");
-                        return true;
-                    case R.id.cameraPage:
-                        launchAddItemActivity("Message from MainActivity");
-                        return true;
-                    case R.id.recipesPage:
-                        launchRecipeActivity("Message from HomeActivity");
-                        return true;
-                    case R.id.recyclePage:
-                        launchRecycleActivity("Message from MainActivity");
-                        return true;
-                }
-
-                return false;
-            }
-        });
-        return false;
-    }
 
 
     //Methods to open new activities for navigation bar functionalities

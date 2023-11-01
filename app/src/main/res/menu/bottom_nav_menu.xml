@@ -20,10 +20,5 @@
         android:enabled="true"
         android:icon="@drawable/recipe_menu_icon"
         android:title="Recipes" />
-    <item
-        android:id="@+id/recyclePage"
-        android:enabled="true"
-        android:icon="@drawable/disposal_menu_icon"
-        android:title="Disposal" />
 
 </menu>

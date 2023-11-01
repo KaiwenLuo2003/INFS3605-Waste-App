@@ -113,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        disposalOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchRecycleActivity("Message from Home");
+            }
+        });
+
         //firebase documentation: https://firebase.google.com/docs/firestore/quickstart#java
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -275,9 +282,6 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.recipesPage:
                         launchRecipeActivity("Message from HomeActivity");
-                        return true;
-                    case R.id.recyclePage:
-                        launchRecycleActivity("Message from MainActivity");
                         return true;
                 }
 
