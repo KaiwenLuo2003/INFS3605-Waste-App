@@ -46,8 +46,11 @@ public class ReceiptResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_receipt_result);
         setTitle("Results");
 
-        db = dbHandler.getWritableDatabase();
-        receiptResultItems = createReceiptItemsList();
+        Intent receiveIntent = getIntent();
+        if(receiveIntent.getStringExtra(EditItemActivity.EDIT_TAG) == null){
+            db = dbHandler.getWritableDatabase();
+            receiptResultItems = createReceiptItemsList();
+        }
 
         //To editable detail screen
         RecyclerViewAdapterReceiptResultView.ItemClickListener listener = new RecyclerViewAdapterReceiptResultView.ItemClickListener() {

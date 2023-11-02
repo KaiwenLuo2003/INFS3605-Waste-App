@@ -18,7 +18,6 @@ import com.example.infs3605wasteapplicationt13a_04.DBHandler;
 import com.example.infs3605wasteapplicationt13a_04.EditItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.LoginActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
-import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.R;
 import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 import com.example.infs3605wasteapplicationt13a_04.recipe.RecipeActivity;
@@ -27,13 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Locale;
 
 public class PantryActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;

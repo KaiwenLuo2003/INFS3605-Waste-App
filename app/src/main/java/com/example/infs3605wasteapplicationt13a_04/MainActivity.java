@@ -1,11 +1,8 @@
 package com.example.infs3605wasteapplicationt13a_04;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.Manifest;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,13 +33,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
-import java.io.IOException;
 
 import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -276,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.accountMenuItem:
+                    Toast.makeText(MainActivity.this, "Currently unavailable", Toast.LENGTH_SHORT);
                     return true;
                 case R.id.logOutMenuItem:
                     FirebaseAuth.getInstance().signOut();
