@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.infs3605wasteapplicationt13a_04.R;
 import com.example.infs3605wasteapplicationt13a_04.objects.IngredientItem;
 
 import java.text.ParseException;
@@ -22,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHolder> {
@@ -39,7 +37,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
     @NonNull
     @Override
     public PantryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(layout.list_pantry_row, parent, false);
+        View view = mInflater.inflate(layout.list_pantry_row, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -49,7 +47,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
     public void onBindViewHolder(@NonNull PantryAdapter.MyViewHolder holder, int position) {
         IngredientItem ingredientItem = mItems.get(position);
         holder.name.setText(ingredientItem.getItemName());
-        String item = ingredientItem.getItemName();
+        String itemName = ingredientItem.getItemName();
         holder.expiry.setText(ingredientItem.getExpiryDate());
         holder.quantity.setText(ingredientItem.getQuantity());
         holder.image.setImageResource(ingredientItem.getIcon());
@@ -112,7 +110,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHold
         @Override
         public void onClick(View view) {
             if (mClickListener != null){
-                mClickListener.onItemClick(view, (String) mItems.get(this.getLayoutPosition()).getItemName());
+                mClickListener.onItemClick(view, mItems.get(this.getLayoutPosition()).getItemName());
             }
         }
     }

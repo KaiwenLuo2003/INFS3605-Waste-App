@@ -176,6 +176,7 @@ public class DBHandler extends SQLiteOpenHelper {
             );
             cursor.moveToNext();
         }
+        cursor.close();
         return item;
     }
 
@@ -196,7 +197,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String whereClause = "id=?";
         String whereArgs[] = {Integer.toString(item.getId())};
         db.delete("INGREDIENT_ITEMS", whereClause, whereArgs);
-
+        db.close();
     }
 
 }

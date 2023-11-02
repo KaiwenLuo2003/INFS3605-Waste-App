@@ -36,6 +36,8 @@ public class EditItemActivity extends AppCompatActivity{
     private IngredientItem item;
     private String itemName;
 
+    public static String EDIT_TAG = "Edit tag";
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,6 +96,7 @@ public class EditItemActivity extends AppCompatActivity{
                 if(intent.getIntExtra(ReceiptResultActivity.ACTIVITY_INDICATOR, 1) == 1){
                     ReceiptResultActivity.updateRecyclerView(dbHandler);
                     Intent returnToReceiptResult = new Intent(EditItemActivity.this, ReceiptResultActivity.class);
+                    returnToReceiptResult.putExtra(EDIT_TAG, "Item Edited");
                     startActivity(returnToReceiptResult);
                 }
                 else if(intent.getIntExtra(PantryActivity.ACTIVITY_INDICATOR, 2) == 2){
@@ -121,7 +124,7 @@ public class EditItemActivity extends AppCompatActivity{
             @Override
             public void onClick(View view){
                 dbHandler.deleteItem(item);
-                Log.d(TAG, "Ingredient details deleted");
+                Log.d(TAG, "Ingredient details eaten");
 
                 PantryActivity.updateRecyclerView(dbHandler);
                 Intent returnToPantry = new Intent(EditItemActivity.this, PantryActivity.class);
