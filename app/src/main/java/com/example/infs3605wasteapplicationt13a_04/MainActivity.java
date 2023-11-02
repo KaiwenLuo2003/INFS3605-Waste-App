@@ -51,6 +51,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     //Declarations
+    private final DBHandler dbHandler = new DBHandler(MainActivity.this);
     public static final String INTENT_MESSAGE = "intent_message";
     private BottomNavigationView bottomNavigationView;
     private RelativeLayout pantry;
@@ -62,9 +63,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView itemsExpiringNotice;
     private TextView locationInformation;
     private TextView usersName;
+    private TextView pantryStatus;
+    private TextView userGreeting;
 
     private static final String apiKey = "41d2114f-6a73-11ee-b75c-9ab569923c64";
-
+    private String userName;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int STORAGE_PERMISSION_REQUEST_CODE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -91,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
         itemsExpiringNotice = findViewById(R.id.itemExpiringTV);
         locationInformation = findViewById(R.id.locationTV);
         usersName = findViewById(R.id.userNameTV);
+        pantryStatus = findViewById(R.id.pantryStatus);
+        userGreeting = findViewById(R.id.userGreeting);
+
+        //Update Status
+        String itemCount = String.valueOf(dbHandler.getItems().size());
+        pantryStatus.setText(itemCount + " items in Pantry");
 
         shop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +134,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Find user details from Firebase then set personalised title
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        usersName.setText(user.getDisplayName());
+        userName = user.getDisplayName();
+        usersName.setText(userName);
+        userGreeting.setText(userName + "!");
 
         // Check and request permissions when needed
         requestCameraPermissions();
@@ -154,36 +165,6 @@ public class MainActivity extends AppCompatActivity {
 //        File image = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures", "PXL_20230926_092346453.jpg");
 //                    uploadImg(image);
 
-        //Nanonets Documentation version
-//        Thread t1 = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                OkHttpClient client = new OkHttpClient();
-//                MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
-//
-//
-//                RequestBody requestBody = new MultipartBody.Builder()
-//                        .setType(MultipartBody.FORM)
-//                        .addFormDataPart("file", image.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(image.getPath())))
-//                        .build();
-//
-//                Request request = new Request.Builder()
-//                        .url("https://app.nanonets.com/api/v2/OCR/Model/49289810-b2ea-4227-8e77-244ec6aec526/LabelFile/")
-//                        .post(requestBody)
-//                        .addHeader("Authorization", Credentials.basic("2dccb768-6e4f-11ee-9011-8676698a674c", ""))
-//                        .build();
-//
-//                try {
-//                    okhttp3.Response response = client.newCall(request).execute();
-//                    Log.d(TAG, image.getName() + ": " + image.getPath());
-//                    Log.d(TAG, "API TEST POST SUCCESSFUL: " + response.toString());
-//                } catch (IOException e) {
-//                    Log.d(TAG, "API TEST POST FAILED :(");
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        });
-//        t1.start();
 
     }
 
@@ -341,5 +322,36 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(LoginActivity.INTENT_MESSAGE, msg);
         startActivity(intent);
     }
+
+    //Nanonets Documentation version
+//        Thread t1 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                OkHttpClient client = new OkHttpClient();
+//                MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
+//
+//
+//                RequestBody requestBody = new MultipartBody.Builder()
+//                        .setType(MultipartBody.FORM)
+//                        .addFormDataPart("file", image.getPath(), RequestBody.create(MEDIA_TYPE_JPG, new File(image.getPath())))
+//                        .build();
+//
+//                Request request = new Request.Builder()
+//                        .url("https://app.nanonets.com/api/v2/OCR/Model/49289810-b2ea-4227-8e77-244ec6aec526/LabelFile/")
+//                        .post(requestBody)
+//                        .addHeader("Authorization", Credentials.basic("2dccb768-6e4f-11ee-9011-8676698a674c", ""))
+//                        .build();
+//
+//                try {
+//                    okhttp3.Response response = client.newCall(request).execute();
+//                    Log.d(TAG, image.getName() + ": " + image.getPath());
+//                    Log.d(TAG, "API TEST POST SUCCESSFUL: " + response.toString());
+//                } catch (IOException e) {
+//                    Log.d(TAG, "API TEST POST FAILED :(");
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
+//        t1.start();
 
 }
