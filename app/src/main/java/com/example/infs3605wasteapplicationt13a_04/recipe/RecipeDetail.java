@@ -63,13 +63,37 @@ public class RecipeDetail extends AppCompatActivity {
         System.out.println("loaded detail recipe");
         Intent intent = getIntent();
 
-        //show loading animation
+        //Get handle for view elements
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.recipesPage);
+        instructions = findViewById(R.id.tvInstruction);
+        openLink = findViewById(R.id.button3);
+        title = findViewById(R.id.tvTitle);
+        recipeImage = findViewById(R.id.ivRecipe);
         loadingGif = findViewById(R.id.loadingGif);
+        usedIngredients = findViewById(R.id.tvIngredients);
+
+        //set view elements invisible as they load
+        instructions.setVisibility(View.INVISIBLE);
+        openLink.setVisibility(View.INVISIBLE);
+        title.setVisibility(View.INVISIBLE);
+        recipeImage.setVisibility(View.INVISIBLE);
+        usedIngredients.setVisibility(View.INVISIBLE);
+
+        //show loading animation
         loadingGif.setVisibility(View.VISIBLE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                //hide loadingGif
                 loadingGif.setVisibility(View.INVISIBLE);
+
+                //reveal all other elements
+                instructions.setVisibility(View.VISIBLE);
+                openLink.setVisibility(View.VISIBLE);
+                title.setVisibility(View.VISIBLE);
+                recipeImage.setVisibility(View.VISIBLE);
+                usedIngredients.setVisibility(View.VISIBLE);
             }
         }, 1500);
 
@@ -82,15 +106,7 @@ public class RecipeDetail extends AppCompatActivity {
             System.out.println("Did not return recipeID");
         }
 
-        //Get handle for view elements
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.recipesPage);
-        instructions = findViewById(R.id.tvInstruction);
-        openLink = findViewById(R.id.button3);
-        title = findViewById(R.id.tvTitle);
-        recipeImage = findViewById(R.id.ivRecipe);
 
-        usedIngredients = findViewById(R.id.tvIngredients);
 
 
         //api calls
