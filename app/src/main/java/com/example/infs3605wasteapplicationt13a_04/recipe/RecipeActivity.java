@@ -17,10 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
-import com.example.infs3605wasteapplicationt13a_04.ImgToTxtAPI.ReceiptResultActivity;
-import com.example.infs3605wasteapplicationt13a_04.LoadingActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
-import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.api.Recipe;
 import com.example.infs3605wasteapplicationt13a_04.api.RecipeInterface;
 import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;

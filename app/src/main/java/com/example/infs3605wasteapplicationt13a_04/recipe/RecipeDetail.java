@@ -3,6 +3,7 @@ package com.example.infs3605wasteapplicationt13a_04.recipe;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,6 +52,7 @@ public class RecipeDetail extends AppCompatActivity {
     private Button openLink;
     private TextView title;
     private ImageView recipeImage;
+    private ImageView loadingGif;
     private TextView usedIngredients;
     private ArrayList<ExtendedIngredient> ingredientsList = new ArrayList<>();
 
@@ -60,6 +62,17 @@ public class RecipeDetail extends AppCompatActivity {
         setContentView(R.layout.recipe_detail);
         System.out.println("loaded detail recipe");
         Intent intent = getIntent();
+
+        //show loading animation
+        loadingGif = findViewById(R.id.loadingGif);
+        loadingGif.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingGif.setVisibility(View.INVISIBLE);
+            }
+        }, 1500);
+
 
         //parse selected recipe from the recyclerview here and find recipe ID
         if (intent.hasExtra(INTENT_MESSAGE)) {
@@ -76,6 +89,7 @@ public class RecipeDetail extends AppCompatActivity {
         openLink = findViewById(R.id.button3);
         title = findViewById(R.id.tvTitle);
         recipeImage = findViewById(R.id.ivRecipe);
+
         usedIngredients = findViewById(R.id.tvIngredients);
 
 
