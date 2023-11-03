@@ -16,6 +16,20 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/loadingGif"
+        android:layout_width="89dp"
+        android:layout_height="91dp"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginEnd="161dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/loading_gif" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="415dp"

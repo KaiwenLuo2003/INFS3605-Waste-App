@@ -3,11 +3,13 @@ package com.example.infs3605wasteapplicationt13a_04.recipe;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infs3605wasteapplicationt13a_04.AddItemActivity;
 import com.example.infs3605wasteapplicationt13a_04.MainActivity;
-import com.example.infs3605wasteapplicationt13a_04.MapActivity;
 import com.example.infs3605wasteapplicationt13a_04.api.Recipe;
 import com.example.infs3605wasteapplicationt13a_04.api.RecipeInterface;
 import com.example.infs3605wasteapplicationt13a_04.pantry.PantryActivity;
@@ -43,6 +44,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RecipeActivity extends AppCompatActivity implements RecyclerViewAdapterRecipeView.ItemClickListener {
     public static final String INTENT_MESSAGE = "intent_message";
     private BottomNavigationView bottomNavigationView;
+    private ImageView loadingGif;
 
     private RecyclerViewAdapterRecipeView adapter;
     private RecyclerView recyclerView;
@@ -59,6 +61,17 @@ public class RecipeActivity extends AppCompatActivity implements RecyclerViewAda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
         setTitle("Recipes");
+
+        //Loading animation
+        loadingGif = findViewById(R.id.loadingGif);
+        loadingGif.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingGif.setVisibility(View.INVISIBLE);
+            }
+        }, 1500);
+
 
         //retrofit api call
         Retrofit retrofit = new Retrofit.Builder().baseUrl(api_url)

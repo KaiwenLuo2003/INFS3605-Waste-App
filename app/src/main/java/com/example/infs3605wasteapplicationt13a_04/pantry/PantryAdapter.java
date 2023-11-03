@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHolder> {
+public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.MyViewHolder>{
     private LayoutInflater mInflater;
     private ArrayList<IngredientItem> mItems;
     private ItemClickListener mClickListener;

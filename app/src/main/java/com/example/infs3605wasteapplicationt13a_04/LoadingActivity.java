@@ -20,6 +20,7 @@ public class LoadingActivity extends AppCompatActivity {
     private static final String TAG = "Loading Activity";
 
     private TextView recycleFact;
+    private TextView loadingText;
     private ImageView loadingGif;
     private String randomRecyclingFact;
     private int randomInt;
@@ -29,8 +30,8 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
-
         recycleFact = findViewById(R.id.RecycleFact);
+        loadingText = findViewById(R.id.loadingText);
 
         //add facts
         ArrayList<String> recyclingFacts = new ArrayList<>();
@@ -56,6 +57,7 @@ public class LoadingActivity extends AppCompatActivity {
     - intent to the next screen
 
  */
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
